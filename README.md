@@ -1,6 +1,9 @@
 QcloudAPIHelper
 ===
 
+[![Build status](https://ci.appveyor.com/api/projects/status/y0ujjupllx5ux5r8?svg=true)](https://ci.appveyor.com/project/xjoker/qcloudapihelper)
+[![NuGet version](https://badge.fury.io/nu/QCloudAPIHelper.png)](https://badge.fury.io/nu/QCloudAPIHelper)
+
 ### Example
 ```csharp
 using QCloudAPIHelper;
