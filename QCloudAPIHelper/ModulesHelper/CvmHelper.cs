@@ -7,9 +7,9 @@ using static QCloudAPIHelper.APIEnum;
 namespace QCloudAPIHelper.ModulesHelper
 {
     /// <summary>
-    /// CVM 通用类
+    /// CVM 列表获取返回类型
     /// </summary>
-    public class CvmType
+    public class CvmListReturnType
     {
         public int code { get; set; }
         public string message { get; set; }
@@ -44,7 +44,7 @@ namespace QCloudAPIHelper.ModulesHelper
         public int vpcId { get; set; }
         public int subnetId { get; set; }
         public int isVpcGateway { get; set; }
-        public List<DiskInfoType> diskInfo { get; set; }
+        public DiskInfoType diskInfo { get; set; }
     }
 
     /// <summary>
@@ -60,9 +60,41 @@ namespace QCloudAPIHelper.ModulesHelper
         public int rootType { get; set; }
     }
 
+    /// <summary>
+    /// 用于CVM 启动/关闭/重启 的返回类型
+    /// </summary>
+    public class BaseCvmOperationReturnType
+    {
+        public int code { get; set; }
+        public string message { get; set; }
+        public dynamic detail { get; set; }
+    }
 
+    /// <summary>
+    /// 用于CVM 重装系统的返回类型
+    /// </summary>
+    public class ReinstallCVMSystemReturnType
+    {
+        public int code { get; set; }
+        public string message { get; set; }
+        public int requestId { get; set; }
+    }
+
+    /// <summary>
+    /// 用于CVM 重命名实例的返回类型
+    /// </summary>
+    public class BaseCVMReturnType
+    {
+        public int code { get; set; }
+        public string message { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 操纵主类
+    /// </summary>
     public static class CvmHelper
     {
+        #region CVM 列表获取
         /// <summary>
         /// 获取CVM列表
         /// </summary>
@@ -76,7 +108,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <param name="offset">偏移量，默认为0</param>
         /// <param name="limit">返回数量默认 20，最大值 100</param>
         /// <returns></returns>
-        public static CvmType GetCVMList(
+        public static CvmListReturnType GetCVMList(
             QCloudHelper q,
             List<string> cvmList = null,
             List<string> lanIpsList = null,
@@ -137,7 +169,184 @@ namespace QCloudAPIHelper.ModulesHelper
             }
 
             var returnJson = q.RequestAPi("DescribeInstances", baseParams, APIUrl.Cvm);
-            return JsonConvert.DeserializeObject<CvmType>(returnJson);
+            return JsonConvert.DeserializeObject<CvmListReturnType>(returnJson);
+        }
+
+        #endregion
+
+        #region CVM  启动/关闭/重启
+        /// <summary>
+        /// 启动CVM
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="cvmList"></param>
+        /// <param name="region"></param>
+        /// <returns></returns>
+        public static BaseCvmOperationReturnType StartCvm(QCloudHelper q, List<string> cvmList, CVMRegion region)
+        {
+            return BaseCvmOperation(q, "StartInstances", cvmList, region);
+        }
+
+        /// <summary>
+        /// 关闭CVM
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="cvmList"></param>
+        /// <param name="region"></param>
+        /// <returns></returns>
+        public static BaseCvmOperationReturnType StopCvm(QCloudHelper q, List<string> cvmList, CVMRegion region)
+        {
+            return BaseCvmOperation(q, "StopInstances", cvmList, region);
+        }
+
+        /// <summary>
+        /// 重启CVM
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="cvmList"></param>
+        /// <param name="region"></param>
+        /// <returns></returns>
+        public static BaseCvmOperationReturnType RestartCvm(QCloudHelper q, List<string> cvmList, CVMRegion region)
+        {
+            return BaseCvmOperation(q, "RestartInstances", cvmList, region);
+        }
+
+        /// <summary>
+        /// CVM 启动/关闭/重启 基础调用方法
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="actionList"></param>
+        /// <param name="cvmList"></param>
+        /// <param name="region"></param>
+        /// <returns></returns>
+        public static BaseCvmOperationReturnType BaseCvmOperation(QCloudHelper q, string actionList, List<string> cvmList, CVMRegion region)
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal);
+
+            if (cvmList != null)
+            {
+                for (int i = 0; i < cvmList.Count; i++)
+                {
+                    baseParams.Add($"instanceIds.{i}", cvmList[i]);
+                }
+            }
+            var returnJson = q.RequestAPi(actionList, baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCvmOperationReturnType>(returnJson);
+        }
+        #endregion
+
+        /// <summary>
+        /// 重装CVM
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="instanceId"></param>
+        /// <param name="region">区域</param>
+        /// <param name="imageType">镜像类型。1：私有镜像2：公有镜像3：镜像市场4：共享镜像。默认为2。需与imageId同时指定。</param>
+        /// <param name="imageId">镜像ID。</param>
+        /// <param name="password">实例密码</param>
+        /// <param name="needSecurityAgent">安装安全Agent，0：不安装，1：安装，默认安装</param>
+        /// <param name="needMonitorAgent">安装监控Agent，0：不安装，1：安装，默认安装</param>
+        /// <param name="rootSize">系统盘大小(GB)。rootSize默认保持不变</param>
+        /// <returns></returns>
+        public static ReinstallCVMSystemReturnType ReInstallCVM(
+            QCloudHelper q, 
+            string instanceId,
+            CVMRegion region,
+            int imageType=2,
+            string imageId=null,
+            string password=null,
+            int needSecurityAgent=1,
+            int needMonitorAgent=1,
+            int? rootSize=null)
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal)
+            {
+                { "instanceId" ,instanceId}
+            };
+
+            if (imageType != 2)
+            {
+                baseParams.Add("imageType", imageType);
+            }
+
+            if (!string.IsNullOrWhiteSpace(imageId))
+            {
+                baseParams.Add("imageId", imageId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                baseParams.Add("password", password);
+            }
+
+            if (needSecurityAgent != 1)
+            {
+                baseParams.Add("needSecurityAgent", needSecurityAgent);
+            }
+
+            if (needMonitorAgent != 1)
+            {
+                baseParams.Add("needMonitorAgent", needMonitorAgent);
+            }
+
+            if (rootSize != null)
+            {
+                baseParams.Add("rootSize", (int)rootSize);
+            }
+
+            var returnJson = q.RequestAPi("ResetInstances", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<ReinstallCVMSystemReturnType>(returnJson);
+
+        }
+
+        /// <summary>
+        /// 重命名 CVM 实例
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="region"></param>
+        /// <param name="instanceId"></param>
+        /// <param name="instanceName"></param>
+        /// <returns></returns>
+        public static BaseCVMReturnType RenameCVM(QCloudHelper q, CVMRegion region, string instanceId, string instanceName)
+        {
+            if(string.IsNullOrWhiteSpace(instanceId) || string.IsNullOrWhiteSpace(instanceName))
+            {
+                throw new ArgumentNullException("instanceId and instanceName is null or empty");
+            }
+
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal)
+            {
+                { "instanceId" ,instanceId},
+                { "instanceName" ,instanceName}
+            };
+
+            var returnJson = q.RequestAPi("ModifyInstanceAttributes", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCVMReturnType>(returnJson);
+
+        }
+
+
+        /// <summary>
+        /// 重置 CVM 实例密码
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="region"></param>
+        /// <param name="instanceIds"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static BaseCVMReturnType ResetCVMPassword(QCloudHelper q, CVMRegion region, List<string> instanceIds, string password)
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal);
+            baseParams.Add("password", password);
+            if (instanceIds != null)
+            {
+                for (int i = 0; i < instanceIds.Count; i++)
+                {
+                    baseParams.Add($"instanceIds.{i}", instanceIds[i]);
+                }
+            }
+            var returnJson = q.RequestAPi("ResetInstancePassword", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCVMReturnType>(returnJson);
         }
     }
 }
