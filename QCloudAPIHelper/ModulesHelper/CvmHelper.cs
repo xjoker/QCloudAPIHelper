@@ -23,16 +23,21 @@ namespace QCloudAPIHelper.ModulesHelper
     public class CvmInstanceSetType
     {
         public string instanceName { get; set; }
+        public string uuid { get; set; }
         public string unInstanceId { get; set; }
         public string lanIp { get; set; }
         public ArrayList wanIpSet { get; set; }
         public int cpu { get; set; }
         public int mem { get; set; }
         public int bandwidth { get; set; }
+        public string deviceClass { get; set; }
+        public int imageId { get; set; }
+        public string imageType { get; set; }
         public string unImgId { get; set; }
         public int status { get; set; }
         public string Region { get; set; }
         public string createTime { get; set; }
+        public string statusTime { get; set; }
         public string deadlineTime { get; set; }
         public int autoRenew { get; set; }
         public int projectId { get; set; }
