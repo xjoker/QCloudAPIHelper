@@ -96,7 +96,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType lan_outtraffic(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "lan_outtraffic", unInstanceId, c, startTime, endTime, p);
+            return TrafficConvert(BaseMonitor(q, "qce/cvm", "lan_outtraffic", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType lan_intraffic(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "lan_intraffic", unInstanceId, c, startTime, endTime, p);
+            return TrafficConvert(BaseMonitor(q, "qce/cvm", "lan_intraffic", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType lan_outpkg(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "lan_outpkg", unInstanceId, c, startTime, endTime, p);
+            return TrafficConvert(BaseMonitor(q, "qce/cvm", "lan_outpkg", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType lan_inpkg(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "lan_inpkg", unInstanceId, c, startTime, endTime, p);
+            return TrafficConvert(BaseMonitor(q, "qce/cvm", "lan_inpkg", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType wan_outtraffic(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "wan_outtraffic", unInstanceId, c, startTime, endTime, p);
+            return TrafficConvert(BaseMonitor(q, "qce/cvm", "wan_outtraffic", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType wan_intraffic(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "wan_intraffic", unInstanceId, c, startTime, endTime, p);
+            return TrafficConvert(BaseMonitor(q, "qce/cvm", "wan_intraffic", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType acc_outtraffic(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "acc_outtraffic", unInstanceId, c, startTime, endTime, p);
+            return TrafficConvert(BaseMonitor(q, "qce/cvm", "acc_outtraffic", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType wan_outpkg(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "wan_outpkg", unInstanceId, c, startTime, endTime, p);
+            return TrafficConvert(BaseMonitor(q, "qce/cvm", "wan_outpkg", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -168,10 +168,32 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType wan_inpkg(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "wan_inpkg", unInstanceId, c, startTime, endTime, p);
+            return TrafficConvert(BaseMonitor(q, "qce/cvm", "wan_inpkg", unInstanceId, c, startTime, endTime, p));
         }
 
-
+        /// <summary>
+        /// 转换带宽内的数据
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        private static MonitorType TrafficConvert(MonitorType b)
+        {
+            MonitorType c = b;
+            ArrayList a = new ArrayList();
+            foreach (var item in b.dataPoints)
+            {
+                if (item != null)
+                {
+                    a.Add(double.Parse(item.ToString()));
+                }
+                else
+                {
+                    a.Add(null);
+                }
+            }
+            c.dataPoints = a;
+            return c;
+        }
 
         /// <summary>
         /// 监控请求基础类
