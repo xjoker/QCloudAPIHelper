@@ -166,7 +166,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 请求 qce/cvm 的 外网入包量
         /// wan_inpkg
         /// </summary>
-        public static MonitorType v(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        public static MonitorType wan_inpkg(QCloudHelper q, string unInstanceId, CVMRegion c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
             return BaseMonitor(q, "qce/cvm", "wan_inpkg", unInstanceId, c, startTime, endTime, p);
         }
