@@ -179,19 +179,22 @@ namespace QCloudAPIHelper.ModulesHelper
         private static MonitorType TrafficConvert(MonitorType b)
         {
             MonitorType c = b;
-            ArrayList a = new ArrayList();
-            foreach (var item in b.dataPoints)
+            if (b.code == 0)
             {
-                if (item != null)
+                ArrayList a = new ArrayList();
+                foreach (var item in b.dataPoints)
                 {
-                    a.Add(double.Parse(item.ToString()));
+                    if (item != null)
+                    {
+                        a.Add(double.Parse(item.ToString()));
+                    }
+                    else
+                    {
+                        a.Add(null);
+                    }
                 }
-                else
-                {
-                    a.Add(null);
-                }
+                c.dataPoints = a;
             }
-            c.dataPoints = a;
             return c;
         }
 
