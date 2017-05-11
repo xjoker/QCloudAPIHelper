@@ -104,6 +104,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 获取CVM列表
         /// </summary>
         /// <param name="q"></param>
+        /// <param name="r">区域  默认为上海区域(兼容以前程序)</param>
         /// <param name="cvmList">（过滤条件）按照一个或者多个实例ID过滤</param>
         /// <param name="lanIpsList">（过滤条件）按照一个或者多个实例的内网IP或公网IP（包括实例创建时自动分配的IP和弹性IP）过滤（此接口支持同时传入多个IP。此参数的具体格式可参考API简介的id.n一节）。</param>
         /// <param name="searchWord">（过滤条件）按照实例名称过滤，支持模糊查询。</param>
@@ -115,6 +116,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <returns></returns>
         public static CvmListReturnType GetCVMList(
             QCloudHelper q,
+            Region r=Region.sh,
             List<string> cvmList = null,
             List<string> lanIpsList = null,
             string searchWord = null,
@@ -173,7 +175,7 @@ namespace QCloudAPIHelper.ModulesHelper
                 baseParams.Add("limit", limit);
             }
 
-            var returnJson = q.RequestAPi("DescribeInstances", baseParams, APIUrl.Cvm);
+            var returnJson = q.RequestAPi("DescribeInstances", baseParams, APIUrl.Cvm,r);
             return JsonConvert.DeserializeObject<CvmListReturnType>(returnJson);
         }
 
