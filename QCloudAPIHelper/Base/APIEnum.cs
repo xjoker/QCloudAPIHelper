@@ -73,6 +73,8 @@ namespace QCloudAPIHelper
             Market,
             [EnumDescription("monitor.api.qcloud.com")]
             Monitor,
+            [EnumDescription("redis.api.qcloud.com")]
+            Redis,
             [EnumDescription("scaling.api.qcloud.com")]
             Scaling,
             [EnumDescription("csec.api.qcloud.com")]
