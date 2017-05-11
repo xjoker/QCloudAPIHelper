@@ -261,14 +261,19 @@ namespace QCloudAPIHelper.ModulesHelper
                 totalCount = temp.totalCount,
                 code = temp.code,
                 codeDesc = temp.codeDesc,
-                message = temp.message
+                message = temp.message,
+                data=new RedisDataType() { redisSet=new List<RedisDataRedisSetType>() }
             };
 
             // 整除得出循环次数,多循环一次获得剩余不满10条的redis信息
             for (int i = 0; i <= count / 10; i++)
             {
                 var t = RedisInstanceList(q, 10, i*10, redisId, redisName, orderBy, orderType, vpcIds, unVpcIds, subnetIds, unSubnetIds, projectIds);
-                r.data.redisSet.AddRange(t.data.redisSet);
+                if (t.data.redisSet!=null)
+                {
+                    r.data.redisSet.AddRange(t.data.redisSet);
+                }
+                
             }
 
             return r;

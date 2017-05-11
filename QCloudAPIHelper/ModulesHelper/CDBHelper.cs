@@ -389,7 +389,11 @@ namespace QCloudAPIHelper.ModulesHelper
             for (int i = 0; i <= count/100; i++)
             {
                 var t = CDBInstanceList(q, r, projectId, status, cdbInstanceIds, cdbInstanceVips,i*100,100);
-                c.cdbInstanceSet.AddRange(t.cdbInstanceSet);
+                if(t.cdbInstanceSet != null)
+                {
+                    c.cdbInstanceSet.AddRange(t.cdbInstanceSet);
+                }
+                
             }
             return c;
         }

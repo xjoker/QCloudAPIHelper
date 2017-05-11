@@ -46,8 +46,8 @@ namespace QCloudAPIHelper.ModulesHelper
         public string networkPayMode { get; set; }
         public int zoneId { get; set; }
         public string zoneName { get; set; }
-        public int vpcId { get; set; }
-        public int subnetId { get; set; }
+        public string vpcId { get; set; } // 腾讯云在香港地区会出现返回String的情况
+        public string subnetId { get; set; } // 腾讯云在香港地区会出现返回String的情况
         public int isVpcGateway { get; set; }
         public DiskInfoType diskInfo { get; set; }
     }
