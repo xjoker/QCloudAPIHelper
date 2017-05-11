@@ -150,7 +150,7 @@ namespace QCloudAPIHelper
         /// <param name="url">域名</param>
         /// <param name="region">区域</param>
         /// <returns></returns>
-        public string RequestAPi(string action, SortedDictionary<string, object> patameters, APIUrl url, CVMRegion region = CVMRegion.sh)
+        public string RequestAPi(string action, SortedDictionary<string, object> patameters, APIUrl url, Region region = Region.sh)
         {
             var basePatameters = new SortedDictionary<string, object>(StringComparer.Ordinal)
             {

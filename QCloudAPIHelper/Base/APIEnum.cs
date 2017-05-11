@@ -124,7 +124,7 @@ namespace QCloudAPIHelper
         /// <summary>
         /// 腾讯云云服务器可用区域
         /// </summary>
-        public enum CVMRegion
+        public enum Region
         {
             /// <summary>
             /// 华南地区(广州)

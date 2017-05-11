@@ -47,6 +47,7 @@
     <Compile Include="Base\APIEnum.cs" />
     <Compile Include="Base\DateTimeHelper.cs" />
     <Compile Include="Base\QCloudHelper.cs" />
+    <Compile Include="ModulesHelper\CDBHelper.cs" />
     <Compile Include="ModulesHelper\CvmHelper.cs" />
     <Compile Include="ModulesHelper\MonitorHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
