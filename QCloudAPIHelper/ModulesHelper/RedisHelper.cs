@@ -226,5 +226,53 @@ namespace QCloudAPIHelper.ModulesHelper
             var returnJson = q.RequestAPi("DescribeRedis", baseParams, APIUrl.Redis);
             return JsonConvert.DeserializeObject<RedisListRetrunType>(returnJson);
         }
+
+        /// <summary>
+        /// Redis 获取所有实例
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="redisId">实例Id</param>
+        /// <param name="redisName">实例名称</param>
+        /// <param name="orderBy">枚举范围redisId,projectId,createtime</param>
+        /// <param name="orderType">1倒序，0顺序，默认倒序</param>
+        /// <param name="vpcIds">历史原因，仍保留该参数，推荐使用下面参数unVpcIds。 私有网络ID数组，数组下标从0开始，如果不传则默认选择基础网络。</param>
+        /// <param name="unVpcIds">私有网络ID数组，数组下标从0开始，如果不传则默认选择基础网络。请使用私有网络列表 查询返回的unVpcId为准，如：vpc-kd7d06of</param>
+        /// <param name="subnetIds">历史原因，仍保留该参数，推荐使用下面参数unSubnetIds。私有网络下的子网ID数组，数组下标从0开始</param>
+        /// <param name="unSubnetIds">子网ID数组，数组下标从0开始。 vpc子网下，取值以查询查询子网列表 返回的unSubnetId为准，如：subnet-3lzrkspo</param>
+        /// <param name="projectIds">项目ID 组成的数组，数组下标从0开始</param>
+        /// <returns></returns>
+        public static RedisListRetrunType RedisInstanceAllList(
+            QCloudHelper q,
+            string redisId = null,
+            string redisName = null,
+            string orderBy = null,
+            int? orderType = null,
+            List<int?> vpcIds = null,
+            List<int?> unVpcIds = null,
+            List<int?> subnetIds = null,
+            List<int?> unSubnetIds = null,
+            List<int?> projectIds = null
+            )
+        {
+            var temp = RedisInstanceList(q, 1, 0, redisId, redisName, orderBy, orderType, vpcIds, unVpcIds, subnetIds, unSubnetIds, projectIds);
+            int count = temp.totalCount;
+            RedisListRetrunType r = new RedisListRetrunType()
+            {
+                totalCount = temp.totalCount,
+                code = temp.code,
+                codeDesc = temp.codeDesc,
+                message = temp.message
+            };
+
+            // 整除得出循环次数,多循环一次获得剩余不满10条的redis信息
+            for (int i = 0; i <= count / 10; i++)
+            {
+                var t = RedisInstanceList(q, 10, i*10, redisId, redisName, orderBy, orderType, vpcIds, unVpcIds, subnetIds, unSubnetIds, projectIds);
+                r.data.redisSet.AddRange(t.data.redisSet);
+            }
+
+            return r;
+
+        }
     }
 }
