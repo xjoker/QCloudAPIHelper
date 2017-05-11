@@ -58,7 +58,7 @@ namespace QCloudAPIHelper
         /// <param name="endpoint"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        private void GetSignature(APIUrl url,
+        private void GetSignature(string url,
             SortedDictionary<string, object> requestParams,
             RequestMethod requestMethod = RequestMethod.GET,
             SignatureMethod signatureMethod = SignatureMethod.HmacSHA1)
@@ -87,7 +87,7 @@ namespace QCloudAPIHelper
 
             tempStr = $"?{tempStr.TrimEnd('&')}";
 
-            string retStr = $"{requestMethod.ToString()}{url.GetRemark()}{_ServerUri}{tempStr}";
+            string retStr = $"{requestMethod.ToString()}{url}{_ServerUri}{tempStr}";
 
 
             if (signatureMethod == SignatureMethod.HmacSHA1)
@@ -119,7 +119,7 @@ namespace QCloudAPIHelper
         /// <param name="data"></param>
         /// <param name="requestMethod"></param>
         /// <returns>JSON</returns>
-        private string Send(APIUrl url, SortedDictionary<string, object> data, RequestMethod requestMethod = RequestMethod.GET)
+        private string Send(string url, SortedDictionary<string, object> data, RequestMethod requestMethod = RequestMethod.GET)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             GetSignature(url, data);
@@ -136,7 +136,7 @@ namespace QCloudAPIHelper
                     }
                     tempUrl = paramStr.TrimEnd('&');
                 }
-                var bb = $"https://{url.GetRemark()}{_ServerUri}?{tempUrl}";
+                var bb = $"https://{url}{_ServerUri}?{tempUrl}";
                 var message = client.GetAsync(bb).Result;
                 return message.Content.ReadAsStringAsync().Result;
             }
@@ -147,16 +147,46 @@ namespace QCloudAPIHelper
         /// 请求API的通用方法
         /// </summary>
         /// <param name="action">接口名</param>
-        /// <param name="url">域名</param>
+        /// <param name="patameters">参数,无参数请传null</param>
+        /// <param name="url">api地址</param>
         /// <param name="region">区域</param>
         /// <returns></returns>
         public string RequestAPi(string action, SortedDictionary<string, object> patameters, APIUrl url, Region region = Region.sh)
+        {
+            return RequestAPiManually(action,patameters,url.GetRemark(),region.ToString());
+        }
+
+        /// <summary>
+        /// 请求API的通用方法
+        /// 需要手动构建参数
+        /// 返回为动态类型
+        /// </summary>
+        /// <param name="action">接口名</param>
+        /// <param name="patameters">参数,无参数请传null</param>
+        /// <param name="url">api地址</param>
+        /// <param name="region">区域</param>
+        /// <returns></returns>
+        public dynamic RequestAPiDynamic(string action, SortedDictionary<string, object> patameters, string url, string region)
+        {
+            dynamic r=Newtonsoft.Json.Linq.JToken.Parse(RequestAPiManually(action, patameters, url, region.ToString())) as dynamic;
+            return r;
+        }
+
+        /// <summary>
+        /// 请求API的通用方法,需要手动构建参数
+        /// </summary>
+        /// <param name="action">接口名</param>
+        /// <param name="patameters">参数,无参数请传null</param>
+        /// <param name="url">api地址</param>
+        /// <param name="region">区域</param>
+        /// <returns></returns>
+        public string RequestAPiManually(string action, SortedDictionary<string, object> patameters, string url, string region)
         {
             var basePatameters = new SortedDictionary<string, object>(StringComparer.Ordinal)
             {
                 { "Action", action },
                 { "Nonce", new Random().Next().ToString() },
-                { "Region", region.ToString() },
+                { "Region", region },
                 { "SecretId", _SecretId },
                 { "Timestamp", DateTime.Now.DateTimeToStamp().ToString() }
             };
