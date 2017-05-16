@@ -179,6 +179,52 @@ namespace QCloudAPIHelper.ModulesHelper
             return JsonConvert.DeserializeObject<CvmListReturnType>(returnJson);
         }
 
+
+        /// <summary>
+        /// 获取所有的CVM
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="r">区域  默认为上海区域(兼容以前程序)</param>
+        /// <param name="cvmList">（过滤条件）按照一个或者多个实例ID过滤</param>
+        /// <param name="lanIpsList">（过滤条件）按照一个或者多个实例的内网IP或公网IP（包括实例创建时自动分配的IP和弹性IP）过滤（此接口支持同时传入多个IP。此参数的具体格式可参考API简介的id.n一节）。</param>
+        /// <param name="searchWord">（过滤条件）按照实例名称过滤，支持模糊查询。</param>
+        /// <param name="status">（过滤条件）实例的状态，状态的列举见上。</param>
+        /// <param name="projectId">（过滤条件）项目ID。</param>
+        /// <param name="zoneId">（过滤条件）可用区ID。</param>
+        /// <returns></returns>
+        public static CvmListReturnType GetCVMAllList(
+            QCloudHelper q,
+            Region r = Region.sh,
+            List<string> cvmList = null,
+            List<string> lanIpsList = null,
+            string searchWord = null,
+            int? status = null,
+            int? projectId = null,
+            int? zoneId = null)
+        {
+            var temp = GetCVMList(q, r, cvmList, lanIpsList, searchWord, status, projectId, zoneId,limit:20);
+            int count = temp.totalCount;
+            CvmListReturnType c = new CvmListReturnType()
+            {
+                totalCount = temp.totalCount,
+                message = temp.message,
+                code = temp.code,
+                instanceSet = new List<CvmInstanceSetType>()
+
+            };
+            // 整除得出循环次数,多循环一次获得剩余不满100条的db信息
+            for (int i = 0; i <= count / 100; i++)
+            {
+                var t = GetCVMList(q, r, cvmList, lanIpsList, searchWord, status, projectId, zoneId, i * 100, 100);
+                if (t.instanceSet != null)
+                {
+                    c.instanceSet.AddRange(t.instanceSet);
+                }
+
+            }
+            return c;
+        }
+
         #endregion
 
         #region CVM  启动/关闭/重启
