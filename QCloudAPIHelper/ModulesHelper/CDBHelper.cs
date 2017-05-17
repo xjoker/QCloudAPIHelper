@@ -307,12 +307,12 @@ namespace QCloudAPIHelper.ModulesHelper
         public static CDBListRetrunType CDBInstanceList(
             QCloudHelper q,
             Region r,
-            int? projectId=null,
-            List<int> status=null,
-            List<string> cdbInstanceIds=null,
-            List<string> cdbInstanceVips=null,
-            int offset=0,
-            int limit=20
+            int? projectId = null,
+            List<int> status = null,
+            List<string> cdbInstanceIds = null,
+            List<string> cdbInstanceVips = null,
+            int offset = 0,
+            int limit = 20
             )
         {
             var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal)
@@ -350,7 +350,7 @@ namespace QCloudAPIHelper.ModulesHelper
                 }
             }
 
-            var returnJson = q.RequestAPi("DescribeCdbInstances", baseParams, APIUrl.Cdb,r);
+            var returnJson = q.RequestAPi("DescribeCdbInstances", baseParams, APIUrl.Cdb, r);
             return JsonConvert.DeserializeObject<CDBListRetrunType>(returnJson);
         }
 
@@ -373,8 +373,8 @@ namespace QCloudAPIHelper.ModulesHelper
             List<string> cdbInstanceVips = null
             )
         {
-            
-            var temp = CDBInstanceList(q, r, projectId, status, cdbInstanceIds, cdbInstanceVips,limit:20);
+
+            var temp = CDBInstanceList(q, r, projectId, status, cdbInstanceIds, cdbInstanceVips, limit: 20);
             int count = temp.totalCount;
             CDBListRetrunType c = new CDBListRetrunType()
             {
@@ -383,18 +383,22 @@ namespace QCloudAPIHelper.ModulesHelper
                 codeDesc = temp.codeDesc,
                 code = temp.code,
                 cdbInstanceSet = new List<CDBInstanceSetType>()
-                
+
             };
-            // 整除得出循环次数,多循环一次获得剩余不满100条的db信息
-            for (int i = 0; i <= count/100; i++)
+            if (count > 0)
             {
-                var t = CDBInstanceList(q, r, projectId, status, cdbInstanceIds, cdbInstanceVips,i*100,100);
-                if(t.cdbInstanceSet != null)
+                // 整除得出循环次数,多循环一次获得剩余不满100条的db信息
+                for (int i = 0; i <= count / 100; i++)
                 {
-                    c.cdbInstanceSet.AddRange(t.cdbInstanceSet);
+                    var t = CDBInstanceList(q, r, projectId, status, cdbInstanceIds, cdbInstanceVips, i * 100, 100);
+                    if (t.cdbInstanceSet != null)
+                    {
+                        c.cdbInstanceSet.AddRange(t.cdbInstanceSet);
+                    }
+
                 }
-                
             }
+
             return c;
         }
     }

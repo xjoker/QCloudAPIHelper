@@ -212,15 +212,18 @@ namespace QCloudAPIHelper.ModulesHelper
                 instanceSet = new List<CvmInstanceSetType>()
 
             };
-            // 整除得出循环次数,多循环一次获得剩余不满100条的db信息
-            for (int i = 0; i <= count / 100; i++)
+            if (count > 0)
             {
-                var t = GetCVMList(q, r, cvmList, lanIpsList, searchWord, status, projectId, zoneId, i * 100, 100);
-                if (t.instanceSet != null)
+                // 整除得出循环次数,多循环一次获得剩余不满100条的db信息
+                for (int i = 0; i <= count / 100; i++)
                 {
-                    c.instanceSet.AddRange(t.instanceSet);
-                }
+                    var t = GetCVMList(q, r, cvmList, lanIpsList, searchWord, status, projectId, zoneId, i * 100, 100);
+                    if (t.instanceSet != null)
+                    {
+                        c.instanceSet.AddRange(t.instanceSet);
+                    }
 
+                }
             }
             return c;
         }

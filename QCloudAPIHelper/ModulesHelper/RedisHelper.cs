@@ -147,7 +147,7 @@ namespace QCloudAPIHelper.ModulesHelper
             QCloudHelper q,
             int limit,
             int offset,
-            string redisId=null,
+            string redisId = null,
             string redisName = null,
             string orderBy = null,
             int? orderType = null,
@@ -262,20 +262,21 @@ namespace QCloudAPIHelper.ModulesHelper
                 code = temp.code,
                 codeDesc = temp.codeDesc,
                 message = temp.message,
-                data=new RedisDataType() { redisSet=new List<RedisDataRedisSetType>() }
+                data = new RedisDataType() { redisSet = new List<RedisDataRedisSetType>() }
             };
-
-            // 整除得出循环次数,多循环一次获得剩余不满10条的redis信息
-            for (int i = 0; i <= count / 10; i++)
+            if (count > 0)
             {
-                var t = RedisInstanceList(q, 10, i*10, redisId, redisName, orderBy, orderType, vpcIds, unVpcIds, subnetIds, unSubnetIds, projectIds);
-                if (t.data.redisSet!=null)
+                // 整除得出循环次数,多循环一次获得剩余不满10条的redis信息
+                for (int i = 0; i <= count / 10; i++)
                 {
-                    r.data.redisSet.AddRange(t.data.redisSet);
-                }
-                
-            }
+                    var t = RedisInstanceList(q, 10, i * 10, redisId, redisName, orderBy, orderType, vpcIds, unVpcIds, subnetIds, unSubnetIds, projectIds);
+                    if (t.data.redisSet != null)
+                    {
+                        r.data.redisSet.AddRange(t.data.redisSet);
+                    }
 
+                }
+            }
             return r;
 
         }
