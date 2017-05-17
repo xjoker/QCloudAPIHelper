@@ -116,7 +116,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <returns></returns>
         public static CvmListReturnType GetCVMList(
             QCloudHelper q,
-            Region r=Region.sh,
+            Region r,
             List<string> cvmList = null,
             List<string> lanIpsList = null,
             string searchWord = null,
@@ -194,7 +194,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <returns></returns>
         public static CvmListReturnType GetCVMAllList(
             QCloudHelper q,
-            Region r = Region.sh,
+            Region r,
             List<string> cvmList = null,
             List<string> lanIpsList = null,
             string searchWord = null,
