@@ -50,6 +50,7 @@
     <Compile Include="ModulesHelper\CDBHelper.cs" />
     <Compile Include="ModulesHelper\CvmHelper.cs" />
     <Compile Include="ModulesHelper\MonitorHelper.cs" />
+    <Compile Include="ModulesHelper\PayOrderHelper.cs" />
     <Compile Include="ModulesHelper\RedisHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -92,7 +92,9 @@ namespace QCloudAPIHelper
             [EnumDescription("wenzhi.api.qcloud.com")]
             Wenzhi,
             [EnumDescription("yunsou.api.qcloud.com")]
-            Yunsou
+            Yunsou,
+            [EnumDescription("partners.api.qcloud.com")]
+            Pay
         }
 
         /// <summary>
