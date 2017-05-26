@@ -5,6 +5,7 @@ using static QCloudAPIHelper.APIEnum;
 
 namespace QCloudAPIHelper.ModulesHelper
 {
+    #region 调用参数
     /// <summary>
     /// 查询实例列表输出参数
     /// </summary>
@@ -291,6 +292,148 @@ namespace QCloudAPIHelper.ModulesHelper
         public int syncStatus { get; set; }
     }
 
+    /// <summary>
+    /// CDB 初始化返回类
+    /// </summary>
+    public class CDBInitializationReturnType
+    {
+        /// <summary>
+        /// 公共错误码, 0表示成功，其他值表示失败。
+        /// </summary>
+        public int code { get; set; }
+        /// <summary>
+        /// 模块错误信息描述，与接口相关。
+        /// </summary>
+        public string message { get; set; }
+        /// <summary>
+        /// 英文错误描述
+        /// </summary>
+        public string codeDesc { get; set; }
+        /// <summary>
+        /// 任务ID，请使用查询初始化异步任务详情接口查询任务详情。
+        /// </summary>
+        public int jobId { get; set; }
+    }
+
+    /// <summary>
+    /// 用于查询初始化任务详情
+    /// </summary>
+    public class CDBInitInfoRetrunType
+    {
+        /// <summary>
+        /// 公共错误码, 0表示成功，其他值表示失败。
+        /// </summary>
+        public int code { get; set; }
+        /// <summary>
+        /// 模块错误信息描述，与接口相关。
+        /// </summary>
+        public string message { get; set; }
+        /// <summary>
+        /// 英文错误描述
+        /// </summary>
+        public string codeDesc { get; set; }
+        /// <summary>
+        /// 任务详情
+        /// </summary>
+        public CDBInitInfoJobRetrunType data { get; set; }
+    }
+
+    /// <summary>
+    /// CDB 初始化任务信息 Data
+    /// </summary>
+    public class CDBInitInfoJobRetrunType
+    {
+        /// <summary>
+        /// 任务错误码, 0表示成功，其他值表示失败。
+        /// </summary>
+        public string code { get; set; }
+        /// <summary>
+        /// 任务信息，如果任务失败，则返回出错信息。
+        /// </summary>
+        public string message { get; set; }
+        /// <summary>
+        /// 任务ID
+        /// </summary>
+        public int jobId { get; set; }
+        /// <summary>
+        /// 任务类型，可能返回的值：6-初始化实例
+        /// </summary>
+        public int type { get; set; }
+        /// <summary>
+        /// 任务状态，可能返回值：0-运行中；2-执行成功；3-执行失败；4-已中止；5-已删除；6-正在中止。
+        /// </summary>
+        public int status { get; set; }
+        /// <summary>
+        /// 任务进度，取值范围：[0-100]，其中，0表示任务开始，100表示任务完成。
+        /// </summary>
+        public int progress { get; set; }
+        /// <summary>
+        /// 任务开始时间，时间格式如：2017-02-05 18:19:08
+        /// </summary>
+        public string startTime { get; set; }
+        /// <summary>
+        /// 任务结束时间，时间格式如：2017-02-05 18:19:08
+        /// </summary>
+        public string endTime { get; set; }
+        /// <summary>
+        /// 任务信息
+        /// </summary>
+        public List<CDBInitInfoJobdetailRetrunType> detail { get; set; }
+
+    }
+
+    /// <summary>
+    /// CDB 初始化任务信息
+    /// </summary>
+    public class CDBInitInfoJobdetailRetrunType
+    {
+        /// <summary>
+        /// 实例ID，格式如：cdb-c1nl9rpv。与云数据库控制台页面中显示的实例ID相同，可使用查询实例列表 接口获取，其值为输出参数中字段 uInstanceId 的值。
+        /// </summary>
+        public string cdbInstanceId { get; set; }
+    }
+
+    /// <summary>
+    /// CDB升级实例返回值
+    /// </summary>
+    public class CDBUpgradeReturnType
+    {
+        /// <summary>
+        /// 公共错误码, 0表示成功，其他值表示失败。
+        /// </summary>
+        public int code { get; set; }
+        /// <summary>
+        /// 模块错误信息描述，与接口相关。
+        /// </summary>
+        public string message { get; set; }
+        /// <summary>
+        /// 英文错误描述
+        /// </summary>
+        public string codeDesc { get; set; }
+        /// <summary>
+        /// 任务ID，请使用查询初始化异步任务详情接口查询任务详情。
+        /// </summary>
+        public List<CDBUpgradeDataReturnType> data { get; set; }
+    }
+
+    /// <summary>
+    /// CDB升级实例data
+    /// </summary>
+    public class CDBUpgradeDataReturnType
+    {
+        public List<string> dealIds { get; set; }
+        public List<string> dealNames { get; set; }
+        public int jobId { get; set; }
+    }
+
+    #endregion
+
+
+
+
+    /// <summary>
+    /// CDB 主类
+    /// </summary>
     public static class CDBHelper
     {
         /// <summary>
@@ -400,6 +543,122 @@ namespace QCloudAPIHelper.ModulesHelper
             }
 
             return c;
+        }
+
+
+        /// <summary>
+        /// CDB 实例初始化
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="r"></param>
+        /// <param name="cdbInstanceId">实例ID，格式如：cdb-c1nl9rpv。与云数据库控制台页面中显示的实例ID相同，可使用查询实例列表 接口获取，其值为输出参数中字段 uInstanceId 的值。</param>
+        /// <param name="charset">字符集，支持字符集：[ latin1、utf8、gbk、utf8mb4 ]</param>
+        /// <param name="port">自定义端口，端口支持范围：[ 1024-65535 ]</param>
+        /// <param name="lowerCaseTableNames">表名是否只存储为小写，可能返回值：1-表名存储为小写； 0-表名大小写敏感</param>
+        /// <param name="password">设置root帐号密码，密码规则：8-16个字符，至少包含字母、数字、字符（支持的字符：!@#$%^*()）中的两种</param>
+        /// <returns></returns>
+        public static CDBInitializationReturnType CDBInitialization(
+            QCloudHelper q,
+            Region r,
+            string cdbInstanceId,
+            string charset,
+            int port,
+            int lowerCaseTableNames,
+            string password
+            )
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal)
+            {
+                { "cdbInstanceId", cdbInstanceId },
+                { "charset", charset },
+                { "port", port },
+                { "lowerCaseTableNames", lowerCaseTableNames },
+                { "password", password }
+            };
+
+            var returnJson = q.RequestAPi("CdbMysqlInit", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBInitializationReturnType>(returnJson);
+
+        }
+
+
+        /// <summary>
+        /// 查询CDB实例初始化状态
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="r"></param>
+        /// <param name="jobId">任务ID</param>
+        /// <returns></returns>
+        public static CDBInitInfoRetrunType CDBInitialization(QCloudHelper q,Region r,int jobId)
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal){ { "jobId", jobId }};
+
+            var returnJson = q.RequestAPi("GetCdbInitInfo", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBInitInfoRetrunType>(returnJson);
+
+        }
+
+
+        /// <summary>
+        /// 升级CDB 实例
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="r"></param>
+        /// <param name="cdbInstanceId">实例ID，格式如：cdb-c1nl9rpv。与云数据库控制台页面中显示的实例ID相同，可使用查询实例列表 接口获取，其值为输出参数中字段 uInstanceId 的值。</param>
+        /// <param name="memory">升级后的内存大小，单位：MB，为保证传入 memory 值有效，请使用查询可创建规格（支持可用区、配置自定义）接口获取可升级的内存规格。</param>
+        /// <param name="volume">升级后的硬盘大小，单位：GB，为保证传入 volume 值有效，请使用查询可创建规格（支持可用区、配置自定义）接口获取可升级的硬盘范围。</param>
+        /// <param name="instanceRole">实例类型，默认为master，支持值包括：master-表示主实例、灾备实例和ro-表示只读实例。</param>
+        /// <param name="protectMode">数据复制方式，默认为0，支持值包括：0-表示异步复制，1-表示半同步复制，2-表示强同步复制，升级主实例时可指定该参数，升级只读实例或者灾备实例时指定该参数无意义</param>
+        /// <param name="deployMode">多可用区域，默认为0，支持值包括：0-表示单可用区，1-表示多可用区，升级主实例时可指定该参数，升级只读实例或者灾备实例时指定该参数无意义</param>
+        /// <param name="slaveZoneFirst">备库1的可用区ID，默认为zoneId的值，升级主实例时可指定该参数，升级只读实例或者灾备实例时指定该参数无意义</param>
+        /// <param name="slaveZoneSecond">备库2的可用区ID，默认为0，升级主实例时可指定该参数，升级只读实例或者灾备实例时指定该参数无意义</param>
+        /// <returns></returns>
+        public static CDBUpgradeReturnType CDBUpgrade(
+            QCloudHelper q, 
+            Region r,
+            string cdbInstanceId,
+            int memory,
+            int volume,
+            string instanceRole="master",
+            int protectMode=0,
+            int deployMode=0,
+            int? slaveZoneFirst=null,
+            int slaveZoneSecond=0
+            )
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) {
+                { "cdbInstanceId", cdbInstanceId },
+                { "memory", memory },
+                { "volume", volume }
+            };
+
+            if (instanceRole != "master"&& !string.IsNullOrWhiteSpace(instanceRole))
+            {
+                baseParams.Add("instanceRole", instanceRole);
+            }
+
+            if (protectMode != 0)
+            {
+                baseParams.Add("protectMode", protectMode);
+            }
+
+            if (deployMode != 0)
+            {
+                baseParams.Add("deployMode", deployMode);
+            }
+
+            if (slaveZoneFirst != null)
+            {
+                baseParams.Add("slaveZoneFirst", slaveZoneFirst);
+            }
+
+            if (slaveZoneSecond != 0)
+            {
+                baseParams.Add("slaveZoneSecond", slaveZoneSecond);
+            }
+
+            var returnJson = q.RequestAPi("UpgradeCdb", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBUpgradeReturnType>(returnJson);
         }
     }
 }
