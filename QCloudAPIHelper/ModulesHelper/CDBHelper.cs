@@ -660,5 +660,24 @@ namespace QCloudAPIHelper.ModulesHelper
             var returnJson = q.RequestAPi("UpgradeCdb", baseParams, APIUrl.Cdb, r);
             return JsonConvert.DeserializeObject<CDBUpgradeReturnType>(returnJson);
         }
+
+        /// <summary>
+        /// 升级数据库引擎版本
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="r"></param>
+        /// <param name="cdbInstanceId">实例ID，格式如：cdb-c1nl9rpv。与云数据库控制台页面中显示的实例ID相同，可使用查询实例列表 接口获取，其值为输出参数中字段 uInstanceId 的值。</param>
+        /// <param name="engineVersion">MySQL版本，值包括：5.5和5.6</param>
+        /// <returns></returns>
+        public static CDBUpgradeReturnType CDBUpgradeEngineVersion(QCloudHelper q,Region r,string cdbInstanceId,string engineVersion)
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) {
+                { "cdbInstanceId", cdbInstanceId },
+                { "engineVersion", engineVersion }
+            };
+
+            var returnJson = q.RequestAPi("UpgradeCdbEngineVersion", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBUpgradeReturnType>(returnJson);
+        }
     }
 }
