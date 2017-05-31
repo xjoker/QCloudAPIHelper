@@ -558,10 +558,238 @@ namespace QCloudAPIHelper.ModulesHelper
         }
         #endregion
 
+        #region 云存储Redis 监控类
+        /// <summary>
+        /// cache命中率
+        /// </summary>
+        public static MonitorType REDIS_cache_hit_ratio(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cache_hit_ratio", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// get命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_get(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_get", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// getbit命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_getbit(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_getbit", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// getrange命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_getrange(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_getrange", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// cache命中率
+        /// </summary>
+        public static MonitorType REDIS_hget命令数(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_hget", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// hgetall命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_hgetall(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_hgetall", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// hmget命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_hmget(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_hmget", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// hmset命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_hmset(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_hmset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// hset命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_hset(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_hset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// hsetnx命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_hsetnx(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_hsetnx", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// lset命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_lset(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_lset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// mget命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_mget(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_mget", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// mset命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_mset(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_mset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// msetnx命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_msetnx(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_msetnx", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// set命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_set(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_set", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// setbit命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_setbit(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_setbit", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// setex命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_setex(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_setex", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// setnx命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_setnx(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_setnx", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// setrange命令数
+        /// </summary>
+        public static MonitorType REDIS_cmdstat_setrange(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cmdstat_setrange", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// 外部链接数
+        /// </summary>
+        public static MonitorType REDIS_connections(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "connections", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+        /// <summary>
+        /// 处理请求数
+        /// </summary>
+        public static MonitorType REDIS_cpu_us(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "cpu_us", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+        /// <summary>
+        /// 外部请求包长度
+        /// </summary>
+        public static MonitorType REDIS_in_flow(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "in_flow", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+        /// <summary>
+        /// 主key量
+        /// </summary>
+        public static MonitorType REDIS_keys(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "keys", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+        /// <summary>
+        /// 外部返回包长度
+        /// </summary>
+        public static MonitorType REDIS_out_flow(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "out_flow", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+        /// <summary>
+        /// 所有get命令数
+        /// </summary>
+        public static MonitorType REDIS_stat_get(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "stat_get", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+        /// <summary>
+        /// 所有set命令数
+        /// </summary>
+        public static MonitorType REDIS_stat_set(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "stat_set", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+        /// <summary>
+        /// 占用空间
+        /// </summary>
+        public static MonitorType REDIS_storage(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "storage", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+        /// <summary>
+        /// 占用空间占比
+        /// </summary>
+        public static MonitorType REDIS_storage_us(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "storage_us", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static MonitorType REDIS_(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, "qce/redis", "", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+        }
+
+        #endregion
+
+
+        #region 监控基础类
         /// <summary>
         /// 监控请求基础类
         /// </summary>
-        public static MonitorType BaseMonitor(QCloudHelper q, string qCloudNamespace, string metricName,string dimensionsName, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        public static MonitorType BaseMonitor(QCloudHelper q, string qCloudNamespace, string metricName, string dimensionsName, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
             if (string.IsNullOrWhiteSpace(unInstanceId)) throw new ArgumentNullException(nameof(unInstanceId));
 
@@ -569,7 +797,7 @@ namespace QCloudAPIHelper.ModulesHelper
             {
                 ["namespace"] = qCloudNamespace,
                 ["metricName"] = metricName,
-                ["dimensions.0.name"]=dimensionsName,
+                ["dimensions.0.name"] = dimensionsName,
                 ["dimensions.0.value"] = unInstanceId,
                 ["period"] = (int)p,
                 ["startTime"] = startTime.DateTimeConvertQCloudFormat(),
@@ -579,6 +807,7 @@ namespace QCloudAPIHelper.ModulesHelper
 
             var returnJson = q.RequestAPi("GetMonitorData", baseParams, APIUrl.Monitor, c);
             return JsonConvert.DeserializeObject<MonitorType>(returnJson);
-        }
+        } 
+        #endregion
     }
 }
