@@ -1,98 +1,181 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using static QCloudAPIHelper.APIEnum;
 
 namespace QCloudAPIHelper.ModulesHelper
 {
+    #region CVM 数据类型
     /// <summary>
-    /// CVM 列表获取返回类型
+    /// CVM 列表返回类型
     /// </summary>
     public class CvmListReturnType
     {
-        public int code { get; set; }
-        public string message { get; set; }
-        public int totalCount { get; set; }
-        public List<CvmInstanceSetType> instanceSet { get; set; }
+        public CVMListResponseType Response { get; set; }
     }
 
     /// <summary>
-    /// CVM 实例信息
+    /// CVM 列表获取返回类型
     /// </summary>
-    public class CvmInstanceSetType
+    public class CVMListResponseType
     {
-        public string instanceName { get; set; }
-        public string uuid { get; set; }
-        public string unInstanceId { get; set; }
-        public string lanIp { get; set; }
-        public ArrayList wanIpSet { get; set; }
-        public int cpu { get; set; }
-        public int mem { get; set; }
-        public int bandwidth { get; set; }
-        public string deviceClass { get; set; }
-        public int imageId { get; set; }
-        public string imageType { get; set; }
-        public string unImgId { get; set; }
-        public int status { get; set; }
-        public string Region { get; set; }
-        public string createTime { get; set; }
-        public string statusTime { get; set; }
-        public string deadlineTime { get; set; }
-        public int autoRenew { get; set; }
-        public int projectId { get; set; }
-        public string os { get; set; }
-        public string cvmPayMode { get; set; }
-        public string networkPayMode { get; set; }
-        public int zoneId { get; set; }
-        public string zoneName { get; set; }
-        public string vpcId { get; set; } // 腾讯云在香港地区会出现返回String的情况
-        public string subnetId { get; set; } // 腾讯云在香港地区会出现返回String的情况
-        public int isVpcGateway { get; set; }
-        public DiskInfoType diskInfo { get; set; }
+        public string RequestId { get; set; }
+        public int TotalCount { get; set; }
+        public List<CVMInstanceSetInstanceType> InstanceSet { get; set; }
     }
 
     /// <summary>
-    /// CVM 硬盘信息
+    /// CVM 返回值 Placement
     /// </summary>
-    public class DiskInfoType
+    public class CVMInstanceSetPlacementType
     {
-        public string storageId { get; set; }
-        public int storageType { get; set; }
-        public int storageSize { get; set; }
-        public string rootId { get; set; }
-        public int rootSize { get; set; }
-        public int rootType { get; set; }
+        public string Zone { get; set; }
+        public int ProjectId { get; set; }
+        public List<String> HostId { get; set; }
     }
+
+    /// <summary>
+    /// CVM 返回值 SystemDisk DataDisk
+    /// </summary>
+    public class CVMDiskType
+    {
+        public string DiskType { get; set; }
+        public string DiskId { get; set; }
+        public int DiskSize { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 返回值 VirtualPrivateCloud
+    /// </summary>
+    public class CVMInstanceSetVirtualPrivateCloudType
+    {
+        public string VpcId { get; set; }
+        public string SubnetId { get; set; }
+        public bool AsVpcGateway { get; set; }
+        public List<string> PrivateIpAddresses { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 返回值 InternetAccessible
+    /// </summary>
+    public class CVMInstanceSetInternetAccessibleType
+    {
+        public string InternetChargeType { get; set; }
+        public int InternetMaxBandwidthOut { get; set; }
+        public bool PublicIpAssigned { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 返回值 InstanceChargePrepaid
+    /// </summary>
+    public class CVMInstanceChargePrepaidType
+    {
+        public int Period { get; set; }
+        public string RenewFlag { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 返回值 LoginSettings
+    /// </summary>
+    public class CVMLoginSettingsType
+    {
+        public string Password { get; set; }
+        public List<string> KeyIds { get; set; }
+        public string KeepImageLogin { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 返回值 RunSecurityServiceEnabled
+    /// </summary>
+    public class CVMInstanceSetRunSecurityServiceEnabledType
+    {
+        public bool Enabled { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 返回值 RunMonitorServiceEnabled
+    /// </summary>
+    public class CVMInstanceSetRunMonitorServiceEnabledType
+    {
+        public bool Enabled { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 返回值 EnhancedService
+    /// </summary>
+    public class CVMEnhancedServiceType
+    {
+        public CVMInstanceSetRunSecurityServiceEnabledType SecurityService { get; set; }
+        public CVMInstanceSetRunMonitorServiceEnabledType MonitorService { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 返回值 Price
+    /// </summary>
+    public class CVMInstanceSetPriceType
+    {
+        public dynamic InstancePrice { get; set; }
+        public dynamic BandwidthPrice { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 返回值 InstanceStatus
+    /// </summary>
+    public class CVMInstanceStatusType
+    {
+        public string InstanceId { get; set; }
+        public string InstanceState { get; set; }
+    }
+
+    /// <summary>
+    /// CVM 返回值 Instance 
+    /// </summary>
+    public class CVMInstanceSetInstanceType
+    {
+        public CVMInstanceSetPlacementType Placement { get; set; }
+        public string InstanceId { get; set; }
+        public string InstanceType { get; set; }
+        public int CPU { get; set; }
+        public int Memory { get; set; }
+        public string InstanceName { get; set; }
+        public string InstanceChargeType { get; set; }
+        public CVMDiskType SystemDisk { get; set; }
+        public List<CVMDiskType> DataDisks { get; set; }
+        public List<string> PrivateIpAddresses { get; set; }
+        public List<string> PublicIpAddresses { get; set; }
+        public CVMInstanceSetInternetAccessibleType InternetAccessible { get; set; }
+        public CVMInstanceSetVirtualPrivateCloudType VirtualPrivateCloud { get; set; }
+        public string ImageId { get; set; }
+        public string AutoRenew { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public DateTime ExpiredTime { get; set; }
+    }
+
 
     /// <summary>
     /// 用于CVM 启动/关闭/重启 的返回类型
     /// </summary>
     public class BaseCvmOperationReturnType
     {
-        public int code { get; set; }
-        public string message { get; set; }
-        public dynamic detail { get; set; }
+        public BaseCvmOperationResponseType Response { get; set; }
+    }
+
+    public class BaseCvmOperationResponseType
+    {
+        public string RequestId { get; set; }
     }
 
     /// <summary>
-    /// 用于CVM 重装系统的返回类型
+    /// CVM实例状态列表返回类型
     /// </summary>
-    public class ReinstallCVMSystemReturnType
+    public class CVMStatusReturnType
     {
-        public int code { get; set; }
-        public string message { get; set; }
-        public int requestId { get; set; }
+        public string RequestId { get; set; }
+        public int TotalCount { get; set; }
+        public CVMInstanceStatusType InstanceStatusSet { get; set; }
     }
 
-    /// <summary>
-    /// 用于CVM 重命名实例的返回类型
-    /// </summary>
-    public class BaseCVMReturnType
-    {
-        public int code { get; set; }
-        public string message { get; set; }
-    }
+    #endregion
 
     /// <summary>
     /// CVM 操纵主类
@@ -117,66 +200,110 @@ namespace QCloudAPIHelper.ModulesHelper
         public static CvmListReturnType GetCVMList(
             QCloudHelper q,
             Region r,
-            List<string> cvmList = null,
-            List<string> lanIpsList = null,
-            string searchWord = null,
-            int? status = null,
-            int? projectId = null,
-            int? zoneId = null,
+            List<string> zone = null,
+            List<string> project_id = null,
+            List<string> host_id = null,
+            List<string> instance_id = null,
+            List<string> instance_name = null,
+            string instance_charge_type = null,
+            List<string> private_ip_address = null,
+            List<string> public_ip_address = null,
             int offset = 0,
             int limit = 20)
         {
+            int filterCount = 1;
 
-            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal);
 
-            if (cvmList != null)
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) { ["Version"] = "2017-03-12" };
+
+            // 按照可用区过滤。
+            if (zone != null && zone.Count > 0)
             {
-                for (int i = 0; i < cvmList.Count; i++)
+                baseParams.Add($"Filters.{filterCount}.Name", "zone");
+                for (int i = 0; i < zone.Count; i++)
                 {
-                    baseParams.Add($"instanceIds.{i}", cvmList[i]);
+                    baseParams.Add($"Filters.{filterCount}.Values.{i}", zone[i]);
                 }
+                filterCount++;
             }
 
-            if (lanIpsList != null)
+            // 按照项目ID过滤。
+            if (project_id != null && project_id.Count > 0)
             {
-                for (int i = 0; i < lanIpsList.Count; i++)
+                baseParams.Add($"Filters.{filterCount}.Name", "project-id");
+                for (int i = 0; i < project_id.Count; i++)
                 {
-                    baseParams.Add($"lanIps.{i}", lanIpsList[i]);
+                    baseParams.Add($"Filters.{filterCount}.Values.{i}", project_id[i]);
                 }
+                filterCount++;
             }
 
-            if (searchWord != null && !string.IsNullOrWhiteSpace(searchWord))
+            // 按照CDH ID过滤。CDH ID形如：host-11112222。
+            if (host_id != null && host_id.Count > 0)
             {
-                baseParams.Add("searchWord", searchWord);
+                baseParams.Add($"Filters.{filterCount}.Name", "host-id");
+                for (int i = 0; i < host_id.Count; i++)
+                {
+                    baseParams.Add($"Filters.{filterCount}.Values.{i}", host_id[i]);
+                }
+                filterCount++;
             }
 
-            if (status != null)
+            // 按照实例ID过滤。实例ID形如：ins-11112222。
+            if (instance_id != null && instance_id.Count > 0)
             {
-                baseParams.Add("status", status);
+                baseParams.Add($"Filters.{filterCount}.Name", "instance-id");
+                for (int i = 0; i < instance_id.Count; i++)
+                {
+                    baseParams.Add($"Filters.{filterCount}.Values.{i}", instance_id[i]);
+                }
+                filterCount++;
             }
 
-            if (projectId != null)
+            // 按照实例名称过滤。
+            if (instance_name != null && instance_name.Count > 0)
             {
-                baseParams.Add("projectId", projectId);
+                baseParams.Add($"Filters.{filterCount}.Name", "instance-name");
+                for (int i = 0; i < instance_name.Count; i++)
+                {
+                    baseParams.Add($"Filters.{filterCount}.Values.{i}", instance_name[i]);
+                }
+                filterCount++;
             }
 
-            if (zoneId != null)
+            // 按照实例计费模式过滤。
+            if (!string.IsNullOrWhiteSpace(instance_charge_type))
             {
-                baseParams.Add("zoneId", zoneId);
+                baseParams.Add($"Filters.{filterCount}.Name", "instance-charge-type");
+                baseParams.Add($"Filters.{filterCount}.Values.1", instance_charge_type);
+                filterCount++;
             }
 
-            if (offset != 0)
+            // 按照实例主网卡的内网IP过滤。
+            if (private_ip_address != null && private_ip_address.Count > 0)
             {
-                baseParams.Add("offset", offset);
+                baseParams.Add($"Filters.{filterCount}.Name", "private-ip-address");
+                for (int i = 0; i < private_ip_address.Count; i++)
+                {
+                    baseParams.Add($"Filters.{filterCount}.Values.{i}", private_ip_address[i]);
+                }
+                filterCount++;
             }
 
-            if (limit != 20)
+            // 按照实例主网卡的公网IP过滤，包含实例创建时自动分配的IP和实例创建后手动绑定的弹性IP。
+            if (public_ip_address != null && public_ip_address.Count > 0)
             {
-                baseParams.Add("limit", limit);
+                baseParams.Add($"Filters.{filterCount}.Name", "public-ip-address");
+                for (int i = 0; i < public_ip_address.Count; i++)
+                {
+                    baseParams.Add($"Filters.{filterCount}.Values.{i}", public_ip_address[i]);
+                }
+                filterCount++;
             }
 
-            var returnJson = q.RequestAPi("DescribeInstances", baseParams, APIUrl.Cvm,r);
-            return JsonConvert.DeserializeObject<CvmListReturnType>(returnJson);
+            var returnJson = q.RequestAPi("DescribeInstances", baseParams, APIUrl.Cvm, r);
+            var d = JsonConvert.DeserializeObject<CvmListReturnType>(returnJson);
+            return d;
         }
 
 
@@ -195,37 +322,40 @@ namespace QCloudAPIHelper.ModulesHelper
         public static CvmListReturnType GetCVMAllList(
             QCloudHelper q,
             Region r,
-            List<string> cvmList = null,
-            List<string> lanIpsList = null,
-            string searchWord = null,
-            int? status = null,
-            int? projectId = null,
-            int? zoneId = null)
+            List<string> zone = null,
+            List<string> project_id = null,
+            List<string> host_id = null,
+            List<string> instance_id = null,
+            List<string> instance_name = null,
+            string instance_charge_type = null,
+            List<string> private_ip_address = null,
+            List<string> public_ip_address = null)
         {
-            var temp = GetCVMList(q, r, cvmList, lanIpsList, searchWord, status, projectId, zoneId,limit:20);
-            int count = temp.totalCount;
-            CvmListReturnType c = new CvmListReturnType()
+            var temp = GetCVMList(q, r, zone, project_id, host_id, instance_id, instance_name, instance_charge_type, private_ip_address, public_ip_address, limit: 20);
+            int count = temp.Response.TotalCount;
+            CVMListResponseType c = new CVMListResponseType()
             {
-                totalCount = temp.totalCount,
-                message = temp.message,
-                code = temp.code,
-                instanceSet = new List<CvmInstanceSetType>()
-
+                TotalCount = temp.Response.TotalCount,
+                RequestId = temp.Response.RequestId,
+                InstanceSet = new List<CVMInstanceSetInstanceType>()
             };
             if (count > 0)
             {
                 // 整除得出循环次数,多循环一次获得剩余不满100条的db信息
                 for (int i = 0; i <= count / 100; i++)
                 {
-                    var t = GetCVMList(q, r, cvmList, lanIpsList, searchWord, status, projectId, zoneId, i * 100, 100);
-                    if (t.instanceSet != null)
+                    var t = GetCVMList(q, r, zone, project_id, host_id, instance_id, instance_name, instance_charge_type, private_ip_address, public_ip_address, i * 100, 100);
+                    if (t.Response.InstanceSet != null)
                     {
-                        c.instanceSet.AddRange(t.instanceSet);
+                        c.InstanceSet.AddRange(t.Response.InstanceSet);
                     }
 
                 }
             }
-            return c;
+
+            CvmListReturnType resp = new CvmListReturnType() { Response = c };
+
+            return resp;
         }
 
         #endregion
@@ -250,9 +380,14 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <param name="cvmList"></param>
         /// <param name="region"></param>
         /// <returns></returns>
-        public static BaseCvmOperationReturnType StopCvm(QCloudHelper q, List<string> cvmList, Region region)
+        public static BaseCvmOperationReturnType StopCvm(QCloudHelper q, List<string> cvmList, Region region, bool ForceStop = false)
         {
-            return BaseCvmOperation(q, "StopInstances", cvmList, region);
+            var force = new SortedDictionary<string, object>();
+            if (ForceStop)
+            {
+                force.Add("ForceStop", true);
+            }
+            return BaseCvmOperation(q, "StopInstances", cvmList, region, force);
         }
 
         /// <summary>
@@ -262,8 +397,13 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <param name="cvmList"></param>
         /// <param name="region"></param>
         /// <returns></returns>
-        public static BaseCvmOperationReturnType RestartCvm(QCloudHelper q, List<string> cvmList, Region region)
+        public static BaseCvmOperationReturnType RestartCvm(QCloudHelper q, List<string> cvmList, Region region, bool ForceReboot = false)
         {
+            var force = new SortedDictionary<string, object>();
+            if (ForceReboot)
+            {
+                force.Add("ForceReboot", true);
+            }
             return BaseCvmOperation(q, "RestartInstances", cvmList, region);
         }
 
@@ -275,17 +415,34 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <param name="cvmList"></param>
         /// <param name="region"></param>
         /// <returns></returns>
-        public static BaseCvmOperationReturnType BaseCvmOperation(QCloudHelper q, string actionList, List<string> cvmList, Region region)
+        public static BaseCvmOperationReturnType BaseCvmOperation(QCloudHelper q, string actionList, List<string> cvmList, Region region, SortedDictionary<string, object> orderParams = null)
         {
-            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal);
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) { { "Version", "2017-03-12" } };
 
             if (cvmList != null)
             {
                 for (int i = 0; i < cvmList.Count; i++)
                 {
-                    baseParams.Add($"instanceIds.{i}", cvmList[i]);
+                    baseParams.Add($"InstanceIds.{i}", cvmList[i]);
                 }
             }
+
+            // 添加其他参数,用于传递强制重启或强制关机
+            if (orderParams != null && orderParams.Count > 0)
+            {
+                foreach (var item in orderParams)
+                {
+                    if (baseParams.ContainsKey(item.Key))
+                    {
+                        baseParams[item.Key] = item.Value;
+                    }
+                    else
+                    {
+                        baseParams.Add(item.Key, item.Value);
+                    }
+                }
+            }
+
             var returnJson = q.RequestAPi(actionList, baseParams, APIUrl.Cvm, region);
             return JsonConvert.DeserializeObject<BaseCvmOperationReturnType>(returnJson);
         }
@@ -305,20 +462,20 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <param name="needMonitorAgent">安装监控Agent，0：不安装，1：安装，默认安装</param>
         /// <param name="rootSize">系统盘大小(GB)。rootSize默认保持不变</param>
         /// <returns></returns>
-        public static ReinstallCVMSystemReturnType ReInstallCVM(
+        public static BaseCvmOperationResponseType ReInstallCVM(
             QCloudHelper q,
             string instanceId,
             Region region,
             int imageType = 2,
             string imageId = null,
-            string password = null,
-            int needSecurityAgent = 1,
-            int needMonitorAgent = 1,
-            int? rootSize = null)
+            CVMDiskType SystemDisk = null,
+            CVMLoginSettingsType LoginSettings = null,
+            CVMEnhancedServiceType EnhancedService = null)
         {
             var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal)
             {
-                { "instanceId" ,instanceId}
+                {"Version","2017-03-12" },
+                { "InstanceId" ,instanceId}
             };
 
             if (imageType != 2)
@@ -331,28 +488,26 @@ namespace QCloudAPIHelper.ModulesHelper
                 baseParams.Add("imageId", imageId);
             }
 
-            if (!string.IsNullOrWhiteSpace(password))
+            // 实例系统盘配置
+            if (SystemDisk != null)
             {
-                baseParams.Add("password", password);
+                baseParams.Add("SystemDisk", SystemDisk);
             }
 
-            if (needSecurityAgent != 1)
+            // 实例登录设置
+            if (LoginSettings != null)
             {
-                baseParams.Add("needSecurityAgent", needSecurityAgent);
+                baseParams.Add("LoginSettings", LoginSettings);
             }
 
-            if (needMonitorAgent != 1)
+            // 增强服务
+            if (EnhancedService != null)
             {
-                baseParams.Add("needMonitorAgent", needMonitorAgent);
-            }
-
-            if (rootSize != null)
-            {
-                baseParams.Add("rootSize", (int)rootSize);
+                baseParams.Add("EnhancedService", EnhancedService);
             }
 
             var returnJson = q.RequestAPi("ResetInstances", baseParams, APIUrl.Cvm, region);
-            return JsonConvert.DeserializeObject<ReinstallCVMSystemReturnType>(returnJson);
+            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson);
 
         }
         #endregion
@@ -366,21 +521,24 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <param name="instanceId"></param>
         /// <param name="instanceName"></param>
         /// <returns></returns>
-        public static BaseCVMReturnType RenameCVM(QCloudHelper q, Region region, string instanceId, string instanceName)
+        public static BaseCvmOperationResponseType RenameCVM(QCloudHelper q, Region region, List<string> instanceId, string instanceName)
         {
-            if (string.IsNullOrWhiteSpace(instanceId) || string.IsNullOrWhiteSpace(instanceName))
-            {
-                throw new ArgumentNullException("instanceId and instanceName is null or empty");
-            }
-
             var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal)
             {
-                { "instanceId" ,instanceId},
+                {"Version","2017-03-12" },
                 { "instanceName" ,instanceName}
             };
 
+            if (instanceId != null)
+            {
+                for (int i = 0; i < instanceId.Count; i++)
+                {
+                    baseParams.Add($"InstanceIds.{i}", instanceId[i]);
+                }
+            }
+
             var returnJson = q.RequestAPi("ModifyInstanceAttributes", baseParams, APIUrl.Cvm, region);
-            return JsonConvert.DeserializeObject<BaseCVMReturnType>(returnJson);
+            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson);
 
         }
         #endregion
@@ -395,10 +553,19 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <param name="instanceIds"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static BaseCVMReturnType ResetCVMPassword(QCloudHelper q, Region region, List<string> instanceIds, string password)
+        public static BaseCvmOperationResponseType ResetCVMPassword(QCloudHelper q, Region region, List<string> instanceIds, string password, string username = null, bool forceStop = false)
         {
-            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal);
-            baseParams.Add("password", password);
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) {
+                { "Version", "2017-03-12" },
+                {"password", password },
+                { "ForceStop",forceStop}
+            };
+
+            if (!string.IsNullOrWhiteSpace(username))
+            {
+                baseParams.Add("UserName", username);
+            }
+
             if (instanceIds != null)
             {
                 for (int i = 0; i < instanceIds.Count; i++)
@@ -407,8 +574,94 @@ namespace QCloudAPIHelper.ModulesHelper
                 }
             }
             var returnJson = q.RequestAPi("ResetInstancePassword", baseParams, APIUrl.Cvm, region);
-            return JsonConvert.DeserializeObject<BaseCVMReturnType>(returnJson);
-        } 
+            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson);
+        }
+        #endregion
+
+
+        #region 退还CVM实例
+        /// <summary>
+        /// 退还实例
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="region"></param>
+        /// <param name="instanceId"></param>
+        /// <returns></returns>
+        public static BaseCvmOperationResponseType TerminateCVM(QCloudHelper q, Region region, List<string> instanceId)
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) { { "Version", "2017-03-12" } };
+
+            if (instanceId != null)
+            {
+                for (int i = 0; i < instanceId.Count; i++)
+                {
+                    baseParams.Add($"InstanceIds.{i}", instanceId[i]);
+                }
+            }
+
+            var returnJson = q.RequestAPi("TerminateInstances", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson);
+
+        }
+        #endregion
+
+        #region 续费CVM实例
+        /// <summary>
+        /// 续费CVM实例
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="region"></param>
+        /// <param name="instanceId"></param>
+        /// <returns></returns>
+        public static BaseCvmOperationResponseType RenewCVM(QCloudHelper q, Region region, List<string> instanceId, CVMInstanceChargePrepaidType InstanceChargePrepaid)
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) {
+                { "Version", "2017-03-12" },
+                { "InstanceChargePrepaid",InstanceChargePrepaid}
+            };
+
+            if (instanceId != null)
+            {
+                for (int i = 0; i < instanceId.Count; i++)
+                {
+                    baseParams.Add($"InstanceIds.{i}", instanceId[i]);
+                }
+            }
+
+            var returnJson = q.RequestAPi("RenewInstances", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson);
+
+        }
+        #endregion
+
+        #region 查看CVM实例状态列表
+        /// <summary>
+        /// 查看CVM实例状态列表
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="region"></param>
+        /// <param name="instanceId"></param>
+        /// <returns></returns>
+        public static CVMStatusReturnType StatusOfCVM(QCloudHelper q, Region region, List<string> instanceId, int Offset = 0, int Limit = 20)
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) {
+                { "Version", "2017-03-12" },
+                {"Offset",Offset },
+                {"Limit",Limit }
+            };
+
+            if (instanceId != null)
+            {
+                for (int i = 0; i < instanceId.Count; i++)
+                {
+                    baseParams.Add($"InstanceIds.{i}", instanceId[i]);
+                }
+            }
+
+            var returnJson = q.RequestAPi("DescribeInstancesStatus", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<CVMStatusReturnType>(returnJson);
+
+        }
         #endregion
     }
 }
