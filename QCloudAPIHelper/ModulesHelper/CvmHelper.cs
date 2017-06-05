@@ -47,7 +47,7 @@ namespace QCloudAPIHelper.ModulesHelper
     /// <summary>
     /// CVM 返回值 VirtualPrivateCloud
     /// </summary>
-    public class CVMInstanceSetVirtualPrivateCloudType
+    public class VirtualPrivateCloudType
     {
         public string VpcId { get; set; }
         public string SubnetId { get; set; }
@@ -144,7 +144,7 @@ namespace QCloudAPIHelper.ModulesHelper
         public List<string> PrivateIpAddresses { get; set; }
         public List<string> PublicIpAddresses { get; set; }
         public CVMInstanceSetInternetAccessibleType InternetAccessible { get; set; }
-        public CVMInstanceSetVirtualPrivateCloudType VirtualPrivateCloud { get; set; }
+        public VirtualPrivateCloudType VirtualPrivateCloud { get; set; }
         public string ImageId { get; set; }
         public string AutoRenew { get; set; }
         public DateTime CreatedTime { get; set; }
@@ -663,5 +663,6 @@ namespace QCloudAPIHelper.ModulesHelper
 
         }
         #endregion
+
     }
 }

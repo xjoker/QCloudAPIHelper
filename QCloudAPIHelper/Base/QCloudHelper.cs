@@ -132,7 +132,7 @@ namespace QCloudAPIHelper
                     var paramStr = "";
                     foreach (var key in _patameters.Keys)
                     {
-                        paramStr += string.Format("{0}={1}&", key, HttpUtility.UrlEncode(_patameters[key].ToString()));
+                        paramStr += string.Format("{0}={1}&", key, System.Net.Web​Utility.UrlEncode(_patameters[key].ToString()));
                     }
                     tempUrl = paramStr.TrimEnd('&');
                 }
@@ -214,11 +214,5 @@ namespace QCloudAPIHelper
             _SecretId = secretId;
             _SecretKey = secretKey;
         }
-
-
-
-
-
-
     }
 }

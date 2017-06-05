@@ -22,11 +22,25 @@ namespace QCloudAPIHelper.ModulesHelper
     }
 
     /// <summary>
+    /// 多对象监控返回类
+    /// </summary>
+    public class MultiMonitorType
+    {
+        public int code { get; set; }
+        public string message { get; set; }
+        public string codeDesc { get; set; }
+        public string metricName { get; set; }
+        public string startTime { get; set; }
+        public string endTime { get; set; }
+        public int period { get; set; }
+        public Dictionary<string, ArrayList> dataPoints { get; set; }
+    }
+
+    /// <summary>
     /// 云监控帮助类
     /// </summary>
     public static class MonitorHelper
     {
-
         #region CVM 监控类
         /// <summary>
         /// 请求 qce/cvm 的CPU使用率
@@ -34,7 +48,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_cpu_usage(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "cpu_usage", "unInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cvm", "cpu_usage", "unInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -43,7 +57,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_cpu_loadavg(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "cpu_loadavg", "unInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cvm", "cpu_loadavg", "unInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -52,7 +66,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_mem_used(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "mem_used", "unInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cvm", "mem_used", "unInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -61,7 +75,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_mem_usage(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "mem_usage", "unInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cvm", "mem_usage", "unInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -70,7 +84,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_disk_read_traffic(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "disk_read_traffic", "unInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cvm", "disk_read_traffic", "unInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -79,7 +93,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_disk_write_traffic(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "disk_write_traffic", "unInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cvm", "disk_write_traffic", "unInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -88,7 +102,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_disk_io_await(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cvm", "disk_io_await", "unInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cvm", "disk_io_await", "unInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -97,7 +111,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_lan_outtraffic(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return CVM_TrafficConvert(BaseMonitor(q, "qce/cvm", "lan_outtraffic", "unInstanceId", unInstanceId, c, startTime, endTime, p));
+            return CVM_TrafficConvert(SimpleBaseMonitor(q, "qce/cvm", "lan_outtraffic", "unInstanceId", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -106,7 +120,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_lan_intraffic(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return CVM_TrafficConvert(BaseMonitor(q, "qce/cvm", "lan_intraffic", "unInstanceId", unInstanceId, c, startTime, endTime, p));
+            return CVM_TrafficConvert(SimpleBaseMonitor(q, "qce/cvm", "lan_intraffic", "unInstanceId", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -115,7 +129,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_lan_outpkg(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return CVM_TrafficConvert(BaseMonitor(q, "qce/cvm", "lan_outpkg", "unInstanceId", unInstanceId, c, startTime, endTime, p));
+            return CVM_TrafficConvert(SimpleBaseMonitor(q, "qce/cvm", "lan_outpkg", "unInstanceId", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -124,7 +138,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_lan_inpkg(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return CVM_TrafficConvert(BaseMonitor(q, "qce/cvm", "lan_inpkg", "unInstanceId", unInstanceId, c, startTime, endTime, p));
+            return CVM_TrafficConvert(SimpleBaseMonitor(q, "qce/cvm", "lan_inpkg", "unInstanceId", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -133,7 +147,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_wan_outtraffic(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return CVM_TrafficConvert(BaseMonitor(q, "qce/cvm", "wan_outtraffic", "unInstanceId", unInstanceId, c, startTime, endTime, p));
+            return CVM_TrafficConvert(SimpleBaseMonitor(q, "qce/cvm", "wan_outtraffic", "unInstanceId", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -142,7 +156,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_wan_intraffic(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return CVM_TrafficConvert(BaseMonitor(q, "qce/cvm", "wan_intraffic", "unInstanceId", unInstanceId, c, startTime, endTime, p));
+            return CVM_TrafficConvert(SimpleBaseMonitor(q, "qce/cvm", "wan_intraffic", "unInstanceId", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -151,7 +165,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_acc_outtraffic(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return CVM_TrafficConvert(BaseMonitor(q, "qce/cvm", "acc_outtraffic", "unInstanceId", unInstanceId, c, startTime, endTime, p));
+            return CVM_TrafficConvert(SimpleBaseMonitor(q, "qce/cvm", "acc_outtraffic", "unInstanceId", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -160,7 +174,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_wan_outpkg(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return CVM_TrafficConvert(BaseMonitor(q, "qce/cvm", "wan_outpkg", "unInstanceId", unInstanceId, c, startTime, endTime, p));
+            return CVM_TrafficConvert(SimpleBaseMonitor(q, "qce/cvm", "wan_outpkg", "unInstanceId", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -169,7 +183,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CVM_wan_inpkg(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return CVM_TrafficConvert(BaseMonitor(q, "qce/cvm", "wan_inpkg", "unInstanceId", unInstanceId, c, startTime, endTime, p));
+            return CVM_TrafficConvert(SimpleBaseMonitor(q, "qce/cvm", "wan_inpkg", "unInstanceId", unInstanceId, c, startTime, endTime, p));
         }
 
         /// <summary>
@@ -207,7 +221,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_slow_queries(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "slow_queries", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "slow_queries", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -215,7 +229,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_max_connections(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "max_connections", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "max_connections", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -223,7 +237,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_select_scan(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "select_scan", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "select_scan", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -231,7 +245,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_select_count(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "select_count", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "select_count", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -239,7 +253,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_com_update(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "com_update", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "com_update", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -247,7 +261,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_com_delete(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "com_delete", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "com_delete", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -255,7 +269,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_com_insert(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "com_insert", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "com_insert", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -263,7 +277,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_com_replace(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "com_replace", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "com_replace", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -271,7 +285,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_queries(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "queries", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "queries", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -279,7 +293,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_threads_connected(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "threads_connected", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "threads_connected", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -287,7 +301,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_real_capacity(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "real_capacity", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "real_capacity", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -295,7 +309,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_capacity(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "capacity", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "capacity", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -303,7 +317,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_bytes_sent(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "bytes_sent", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "bytes_sent", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -311,7 +325,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_bytes_received(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "bytes_received", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "bytes_received", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -319,7 +333,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_qcache_use_rate(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "qcache_use_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "qcache_use_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -327,7 +341,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_qcache_hit_rate(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "qcache_hit_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "qcache_hit_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -335,7 +349,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_table_locks_waited(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "table_locks_waited", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "table_locks_waited", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -343,7 +357,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_created_tmp_tables(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "created_tmp_tables", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "created_tmp_tables", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -351,7 +365,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_innodb_cache_use_rate(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "innodb_cache_use_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "innodb_cache_use_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -359,7 +373,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_innodb_cache_hit_rate(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "innodb_cache_hit_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "innodb_cache_hit_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -367,7 +381,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_innodb_os_file_reads(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "innodb_os_file_reads", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "innodb_os_file_reads", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -375,7 +389,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_innodb_os_file_writes(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "innodb_os_file_writes", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "innodb_os_file_writes", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -383,7 +397,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_innodb_os_fsyncs(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "innodb_os_fsyncs", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "innodb_os_fsyncs", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -391,7 +405,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_key_cache_use_rate(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "key_cache_use_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "key_cache_use_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -399,7 +413,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_key_cache_hit_rate(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "key_cache_hit_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "key_cache_hit_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -407,7 +421,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_volume_rate(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "volume_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "volume_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -415,7 +429,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_query_rate(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "query_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "query_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -423,7 +437,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_qps(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "qps", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "qps", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -431,7 +445,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_tps(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "tps", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "tps", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -439,7 +453,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_cpu_use_rate(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "cpu_use_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "cpu_use_rate", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -447,7 +461,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType CDB_memory_use(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/cdb", "memory_use", "uInstanceId", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/cdb", "memory_use", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
         #endregion
@@ -458,7 +472,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_data_disk_available(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "data_disk_available", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "data_disk_available", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -466,7 +480,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_binlog_disk_available(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "binlog_disk_available", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "binlog_disk_available", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -474,7 +488,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_select_total(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "select_total", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "select_total", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -482,7 +496,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_long_query(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "long_query", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "long_query", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -490,7 +504,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_update_total(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "update_total", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "update_total", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -498,7 +512,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_insert_total(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "insert_total", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "insert_total", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -506,7 +520,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_delete_total(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "delete_total", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "delete_total", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -514,7 +528,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_mem_available(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "mem_available", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "mem_available", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -522,7 +536,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_disk_iops(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "disk_iops", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "disk_iops", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -530,7 +544,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_conn_active(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "conn_active", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "conn_active", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -538,7 +552,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_conn_running(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "conn_running", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "conn_running", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -546,7 +560,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_is_mater_switched(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "is_mater_switched", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "is_mater_switched", "uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -554,7 +568,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType TDSQL_cpu_usage_rate(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/tdsql", "cpu_usage_rate", "uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/tdsql", "cpu_usage_rate", "uuid", unInstanceId, c, startTime, endTime, p);
         }
         #endregion
 
@@ -564,7 +578,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cache_hit_ratio(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cache_hit_ratio", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cache_hit_ratio", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -572,7 +586,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_get(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_get", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_get", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -580,7 +594,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_getbit(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_getbit", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_getbit", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -588,7 +602,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_getrange(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_getrange", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_getrange", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -596,7 +610,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_hget命令数(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_hget", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_hget", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -604,7 +618,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_hgetall(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_hgetall", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_hgetall", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -612,7 +626,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_hmget(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_hmget", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_hmget", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -620,7 +634,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_hmset(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_hmset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_hmset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -628,7 +642,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_hset(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_hset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_hset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -636,7 +650,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_hsetnx(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_hsetnx", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_hsetnx", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -644,7 +658,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_lset(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_lset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_lset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -652,7 +666,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_mget(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_mget", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_mget", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -660,7 +674,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_mset(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_mset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_mset", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -668,7 +682,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_msetnx(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_msetnx", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_msetnx", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -676,7 +690,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_set(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_set", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_set", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -684,7 +698,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_setbit(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_setbit", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_setbit", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -692,7 +706,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_setex(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_setex", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_setex", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -700,7 +714,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_setnx(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_setnx", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_setnx", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -708,7 +722,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_cmdstat_setrange(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cmdstat_setrange", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cmdstat_setrange", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         /// <summary>
@@ -716,98 +730,218 @@ namespace QCloudAPIHelper.ModulesHelper
         /// </summary>
         public static MonitorType REDIS_connections(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "connections", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "connections", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
         /// <summary>
         /// 处理请求数
         /// </summary>
         public static MonitorType REDIS_cpu_us(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "cpu_us", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "cpu_us", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
         /// <summary>
         /// 外部请求包长度
         /// </summary>
         public static MonitorType REDIS_in_flow(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "in_flow", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "in_flow", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
         /// <summary>
         /// 主key量
         /// </summary>
         public static MonitorType REDIS_keys(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "keys", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "keys", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
         /// <summary>
         /// 外部返回包长度
         /// </summary>
         public static MonitorType REDIS_out_flow(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "out_flow", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "out_flow", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
         /// <summary>
         /// 所有get命令数
         /// </summary>
         public static MonitorType REDIS_stat_get(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "stat_get", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "stat_get", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
         /// <summary>
         /// 所有set命令数
         /// </summary>
         public static MonitorType REDIS_stat_set(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "stat_set", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "stat_set", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
         /// <summary>
         /// 占用空间
         /// </summary>
         public static MonitorType REDIS_storage(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "storage", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "storage", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
         /// <summary>
         /// 占用空间占比
         /// </summary>
         public static MonitorType REDIS_storage_us(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "storage_us", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "storage_us", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
         /// <summary>
         /// 
         /// </summary>
         public static MonitorType REDIS_(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, "qce/redis", "", "redis_uuid", unInstanceId, c, startTime, endTime, p);
+            return SimpleBaseMonitor(q, "qce/redis", "", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
         #endregion
 
 
+        #region 监控基础类注释
+        //GetMonitorData接口使用方法：
+
+        //1. 拉取单对象
+        //https://monitor.api.qcloud.com/v2/index.php?
+        //&<公共请求参数>
+        //&namespace=qce/lb
+        //&metricName=pvv_outtraffic
+        //&dimensions.0.name=protocol
+        //&dimensions.0.value=tcp
+        //&dimensions.1.name=vip
+        //&dimensions.1.value=123.206.201.134
+        //&dimensions.2.name=vport
+        //&dimensions.2.value=80
+        //&startTime=2016-06-28 14:10:00
+        //&endTime=2016-06-28 14:20:00
+
+        //2. 批量拉取多对象
+        //https://monitor.api.qcloud.com/v2/index.php?
+        //&<公共请求参数>
+        //&namespace=qce/lb
+        //&metricName=pvv_outtraffic
+        //&batch.0.dimensions.0.name=protocol
+        //&batch.0.dimensions.0.value=tcp
+        //&batch.0.dimensions.1.name=vip
+        //&batch.0.dimensions.1.value=123.206.201.134
+        //&batch.0.dimensions.2.name=vport
+        //&batch.0.dimensions.2.value=80
+        //&batch.1.dimensions.0.name=protocol
+        //&batch.1.dimensions.0.value=tcp
+        //&batch.1.dimensions.1.name=vip
+        //&batch.1.dimensions.1.value=123.206.201.134
+        //&batch.1.dimensions.2.name=vport
+        //&batch.1.dimensions.2.value=80
+        //&startTime=2016-06-28 14:10:00
+        //&endTime=2016-06-28 14:20:00
+
+        //增加batch，将多个dimensions列表包含在里面，限制单次最多可请求50个对象
+        #endregion
+
+
         #region 监控基础类
+
+        /// <summary>
+        /// 兼容旧接口的的简单监控基础类
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="qCloudNamespace"></param>
+        /// <param name="metricName"></param>
+        /// <param name="dimensionsName"></param>
+        /// <param name="dimensionsValue"></param>
+        /// <param name="c"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static MonitorType SimpleBaseMonitor(QCloudHelper q, string qCloudNamespace, string metricName, string dimensionsName, string dimensionsValue, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, qCloudNamespace, metricName, new Dictionary<string, string>() { { dimensionsName, dimensionsValue } }, c, startTime, endTime, p);
+        }
+
+        /// <summary>
+        /// 批量拉取多对象
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="qCloudNamespace"></param>
+        /// <param name="metricName"></param>
+        /// <param name="dimensionsMulti"></param>
+        /// <param name="c"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static MultiMonitorType MultiBaseMonitor(QCloudHelper q, string qCloudNamespace, string metricName, List<Dictionary<string, string>> dimensionsMulti, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        {
+            return BaseMonitor(q, qCloudNamespace, metricName, null, c, startTime, endTime, p, true, dimensionsMulti);
+        }
+
+
         /// <summary>
         /// 监控请求基础类
         /// </summary>
-        public static MonitorType BaseMonitor(QCloudHelper q, string qCloudNamespace, string metricName, string dimensionsName, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
+        /// <param name="q"></param>
+        /// <param name="qCloudNamespace"></param>
+        /// <param name="metricName"></param>
+        /// <param name="dimensions"></param>
+        /// <param name="c"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="p"></param>
+        /// <param name="multiObjectPull"></param>
+        /// <param name="dimensionsMulti"></param>
+        /// <returns></returns>
+        public static dynamic BaseMonitor(QCloudHelper q, string qCloudNamespace, string metricName, Dictionary<string, string> dimensions, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute, bool multiObjectPull = false, List<Dictionary<string, string>> dimensionsMulti = null)
         {
-            if (string.IsNullOrWhiteSpace(unInstanceId)) throw new ArgumentNullException(nameof(unInstanceId));
-
             var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal)
             {
                 ["namespace"] = qCloudNamespace,
                 ["metricName"] = metricName,
-                ["dimensions.0.name"] = dimensionsName,
-                ["dimensions.0.value"] = unInstanceId,
                 ["period"] = (int)p,
                 ["startTime"] = startTime.DateTimeConvertQCloudFormat(),
                 ["endTime"] = endTime.DateTimeConvertQCloudFormat()
             };
 
+            // 拉取单个对象
+            if (multiObjectPull == false && dimensions != null && dimensions.Count > 0)
+            {
+                int count = 0;
 
+                foreach (var dimensionsKey in dimensions.Keys)
+                {
+                    baseParams.Add($"dimensions.{count}.name", dimensionsKey);
+                    baseParams.Add($"dimensions.{count}.value", dimensions[dimensionsKey]);
+                    count++;
+                }
+            }
+            // 批量拉取多个对象
+            else if (multiObjectPull && dimensionsMulti != null && dimensionsMulti.Count > 0)
+            {
+                int batchCount = 0;
+
+                foreach (var dimensionsDict in dimensionsMulti)
+                {
+                    int count = 0;
+                    foreach (var dimensionsKey in dimensionsDict.Keys)
+                    {
+                        baseParams.Add($"batch.{batchCount}.dimensions.{count}.name", dimensionsKey);
+                        baseParams.Add($"batch.{batchCount}.dimensions.{count}.value", dimensionsDict[dimensionsKey]);
+                        count++;
+                    }
+                    batchCount++;
+                }
+            }
             var returnJson = q.RequestAPi("GetMonitorData", baseParams, APIUrl.Monitor, c);
-            return JsonConvert.DeserializeObject<MonitorType>(returnJson);
-        } 
+            if (multiObjectPull)
+            {
+                return JsonConvert.DeserializeObject<MultiMonitorType>(returnJson);
+            }
+            else
+            {
+                return JsonConvert.DeserializeObject<MonitorType>(returnJson);
+            }
+        }
         #endregion
     }
 }
