@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using static QCloudAPIHelper.APIEnum;
 
@@ -31,6 +32,35 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 返回的实例信息
         /// </summary>
         public List<CDBInstanceSetType> cdbInstanceSet { get; set; }
+    }
+
+    /// <summary>
+    /// CDB费用/交易返回类
+    /// </summary>
+    public class CDBDealReturnType
+    {
+        /// <summary>
+        /// 公共错误码, 0表示成功，其他值表示失败。
+        /// </summary>
+        public int code { get; set; }
+        /// <summary>
+        /// 模块错误信息描述，与接口相关。
+        /// </summary>
+        public string message { get; set; }
+        /// <summary>
+        /// 英文错误描述
+        /// </summary>
+        public string codeDesc { get; set; }
+
+        /// <summary>
+        /// 短订单ID，用于调用云API相关接口，如获取订单信息
+        /// </summary>
+        public ArrayList dealIds { get; set; }
+
+        /// <summary>
+        /// 数据
+        /// </summary>
+        public Dictionary<string,dynamic> data { get; set; }
     }
 
     /// <summary>
@@ -434,6 +464,7 @@ namespace QCloudAPIHelper.ModulesHelper
     /// </summary>
     public static class CDBHelper
     {
+        #region 实例操作
         /// <summary>
         /// 查询实例列表 输入参数
         /// </summary>
@@ -587,15 +618,56 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <param name="r"></param>
         /// <param name="jobId">任务ID</param>
         /// <returns></returns>
-        public static CDBInitInfoRetrunType CDBInitialization(QCloudHelper q,Region r,int jobId)
+        public static CDBInitInfoRetrunType CDBInitialization(QCloudHelper q, Region r, int jobId)
         {
-            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal){ { "jobId", jobId }};
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) { { "jobId", jobId } };
 
             var returnJson = q.RequestAPi("GetCdbInitInfo", baseParams, APIUrl.Cdb, r);
             return JsonConvert.DeserializeObject<CDBInitInfoRetrunType>(returnJson);
 
         }
 
+
+
+        /// <summary>
+        /// 升级数据库引擎版本
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="r"></param>
+        /// <param name="cdbInstanceId">实例ID，格式如：cdb-c1nl9rpv。与云数据库控制台页面中显示的实例ID相同，可使用查询实例列表 接口获取，其值为输出参数中字段 uInstanceId 的值。</param>
+        /// <param name="engineVersion">MySQL版本，值包括：5.5和5.6</param>
+        /// <returns></returns>
+        public static CDBUpgradeReturnType CDBUpgradeEngineVersion(QCloudHelper q, Region r, string cdbInstanceId, string engineVersion)
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) {
+                { "cdbInstanceId", cdbInstanceId },
+                { "engineVersion", engineVersion }
+            };
+
+            var returnJson = q.RequestAPi("UpgradeCdbEngineVersion", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBUpgradeReturnType>(returnJson);
+        }
+        #endregion
+
+        #region 实例费用等相关业务
+        /// <summary>
+        /// CDB续费
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="r"></param>
+        /// <param name="cdbInstanceId">实例ID</param>
+        /// <param name="period">续费时长，单位：月，最小值1，最大值为36</param>
+        /// <returns></returns>
+        public static CDBDealReturnType CDBRenew(QCloudHelper q, Region r, string cdbInstanceId, int period)
+        {
+            var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) {
+                { "cdbInstanceId", cdbInstanceId },
+                { "period", period }
+            };
+
+            var returnJson = q.RequestAPi("RenewCdb", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBDealReturnType>(returnJson);
+        }
 
         /// <summary>
         /// 升级CDB 实例
@@ -612,16 +684,16 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <param name="slaveZoneSecond">备库2的可用区ID，默认为0，升级主实例时可指定该参数，升级只读实例或者灾备实例时指定该参数无意义</param>
         /// <returns></returns>
         public static CDBUpgradeReturnType CDBUpgrade(
-            QCloudHelper q, 
+            QCloudHelper q,
             Region r,
             string cdbInstanceId,
             int memory,
             int volume,
-            string instanceRole="master",
-            int protectMode=0,
-            int deployMode=0,
-            int? slaveZoneFirst=null,
-            int slaveZoneSecond=0
+            string instanceRole = "master",
+            int protectMode = 0,
+            int deployMode = 0,
+            int? slaveZoneFirst = null,
+            int slaveZoneSecond = 0
             )
         {
             var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) {
@@ -630,7 +702,7 @@ namespace QCloudAPIHelper.ModulesHelper
                 { "volume", volume }
             };
 
-            if (instanceRole != "master"&& !string.IsNullOrWhiteSpace(instanceRole))
+            if (instanceRole != "master" && !string.IsNullOrWhiteSpace(instanceRole))
             {
                 baseParams.Add("instanceRole", instanceRole);
             }
@@ -660,22 +732,153 @@ namespace QCloudAPIHelper.ModulesHelper
         }
 
         /// <summary>
-        /// 升级数据库引擎版本
+        /// 创建实例 (包年包月)
         /// </summary>
         /// <param name="q"></param>
         /// <param name="r"></param>
-        /// <param name="cdbInstanceId">实例ID，格式如：cdb-c1nl9rpv。与云数据库控制台页面中显示的实例ID相同，可使用查询实例列表 接口获取，其值为输出参数中字段 uInstanceId 的值。</param>
-        /// <param name="engineVersion">MySQL版本，值包括：5.5和5.6</param>
+        /// <param name="cdbType">实例规格，支持固定规格和自定义规格/传 CUSTOM 代表自定义规格固定规格类型将会下线，推荐使用自定义规格</param>
+        /// <param name="engineVersion">MySQL版本 默认5.5</param>
+        /// <param name="period">实例时长，单位：月，最小值1，最大值为36</param>
+        /// <param name="goodsNum">实例数量，默认值为1, 最小值1，最大值为10</param>
+        /// <param name="vpcId">私有网络ID，如果不传则默认选择基础网络</param>
+        /// <param name="subnetId">私有网络下的子网ID，如果设置了 vpcId，则 subnetId 必填</param>
+        /// <param name="projectId">项目ID，不填为默认项目</param>
+        /// <param name="memory">实例内存大小，单位：MB，当 cdbType 值为 CUSTOM 时， memory 为必填</param>
+        /// <param name="volume">实例硬盘大小，单位：GB，当 cdbType 值为 CUSTOM 时， volume 为必填</param>
+        /// <param name="zoneId">可用区ID，该参数缺省时，系统会自动选择一个可用区</param>
+        /// <param name="port">自定义端口，端口支持范围：[ 1024-65535 ]</param>
+        /// <param name="password">设置root帐号密码，密码规则：8-16个字符，至少包含字母、数字、字符（支持的字符：!@#$%^*()）中的两种，购买主实例时可指定该参数，购买只读实例或者灾备实例时指定该参数无意义</param>
+        /// <param name="instanceRole">实例类型，默认为 master，支持值包括：master-表示主实例，ro-表示只读实例</param>
+        /// <param name="cdbInstanceId">实例ID，购买只读实例时必填，该字段表示只读实例的主实例ID，请使用查询实例列表接口查询云数据库实例ID</param>
+        /// <param name="protectMode">数据复制方式，默认为0，支持值包括：0-表示异步复制，1-表示半同步复制，2-表示强同步复制</param>
+        /// <param name="deployMode">多可用区域，默认为0，支持值包括：0-表示单可用区，1-表示多可用区</param>
+        /// <param name="slaveZoneFirst">备库1的可用区ID，默认为zoneId的值</param>
+        /// <param name="slaveZoneSecond">备库2的可用区ID，默认为0</param>
+        /// <param name="paramList">其中paramList为修改实例的参数列表.其中 Key 为待修改参数的名，value 为待修改参数的值</param>
         /// <returns></returns>
-        public static CDBUpgradeReturnType CDBUpgradeEngineVersion(QCloudHelper q,Region r,string cdbInstanceId,string engineVersion)
+        public static CDBDealReturnType CDBCreate(
+            QCloudHelper q, 
+            Region r, 
+            string cdbType="CUSTOM",
+            string engineVersion="5.5",
+            int? period=null,
+            int? goodsNum = null,
+            string vpcId = null,
+            string subnetId = null,
+            int? projectId = null,
+            int? memory = null,
+            int? volume = null,
+            int? zoneId = null,
+            int? port = null,
+            string password = null,
+            string instanceRole = null,
+            string cdbInstanceId = null,
+            int protectMode = 0,
+            int deployMode = 0,
+            int? slaveZoneFirst = null,
+            int slaveZoneSecond = 0,
+            Dictionary<string,string> paramList=null
+            )
         {
             var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) {
-                { "cdbInstanceId", cdbInstanceId },
+                { "cdbType", cdbType },
                 { "engineVersion", engineVersion }
             };
 
-            var returnJson = q.RequestAPi("UpgradeCdbEngineVersion", baseParams, APIUrl.Cdb, r);
-            return JsonConvert.DeserializeObject<CDBUpgradeReturnType>(returnJson);
+            if (period != null)
+            {
+                baseParams.Add("period", period);
+            }
+
+            if (goodsNum != null)
+            {
+                baseParams.Add("goodsNum", goodsNum);
+            }
+
+            if (vpcId != null)
+            {
+                baseParams.Add("vpcId", vpcId);
+            }
+
+            if (subnetId != null)
+            {
+                baseParams.Add("subnetId", subnetId);
+            }
+
+            if (projectId != null)
+            {
+                baseParams.Add("projectId", projectId);
+            }
+
+            if (memory != null)
+            {
+                baseParams.Add("memory", memory);
+            }
+
+            if (volume != null)
+            {
+                baseParams.Add("volume", volume);
+            }
+
+            if (zoneId != null)
+            {
+                baseParams.Add("zoneId", zoneId);
+            }
+
+            if (port != null)
+            {
+                baseParams.Add("port", port);
+            }
+
+            if (password != null)
+            {
+                baseParams.Add("password", password);
+            }
+
+            if (instanceRole != null)
+            {
+                baseParams.Add("instanceRole", instanceRole);
+            }
+
+            if (cdbInstanceId != null)
+            {
+                baseParams.Add("cdbInstanceId", cdbInstanceId);
+            }
+
+            if (protectMode != 0)
+            {
+                baseParams.Add("protectMode", protectMode);
+            }
+
+            if (deployMode != 0)
+            {
+                baseParams.Add("deployMode", deployMode);
+            }
+
+            if (slaveZoneFirst != null)
+            {
+                baseParams.Add("slaveZoneFirst", slaveZoneFirst);
+            }
+
+            if (slaveZoneSecond!=0)
+            {
+                baseParams.Add("slaveZoneSecond", slaveZoneSecond);
+            }
+
+            if (paramList != null)
+            {
+                int count = 0;
+                foreach (var paramListKey in paramList.Keys)
+                {
+                    baseParams.Add($"paramList.{count}.name", paramListKey);
+                    baseParams.Add($"paramList.{count}.value", paramList[paramListKey]);
+                }
+            }
+            
+            var returnJson = q.RequestAPi("RenewCdb", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBDealReturnType>(returnJson);
         }
+
+        #endregion
     }
 }
