@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
+using QCloudAPIHelper.Base;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using static QCloudAPIHelper.APIEnum;
 
 namespace QCloudAPIHelper.ModulesHelper
 {
@@ -39,9 +39,10 @@ namespace QCloudAPIHelper.ModulesHelper
     /// <summary>
     /// 云监控帮助类
     /// </summary>
-    public static class MonitorHelper
+    public static class Monitor
     {
         #region CVM 监控类
+
         /// <summary>
         /// 请求 qce/cvm 的CPU使用率
         /// cpu_usage
@@ -212,7 +213,8 @@ namespace QCloudAPIHelper.ModulesHelper
             }
             return c;
         }
-        #endregion
+
+        #endregion CVM 监控类
 
         #region 云数据库MySQL 监控类
 
@@ -464,9 +466,10 @@ namespace QCloudAPIHelper.ModulesHelper
             return SimpleBaseMonitor(q, "qce/cdb", "memory_use", "uInstanceId", unInstanceId, c, startTime, endTime, p);
         }
 
-        #endregion
+        #endregion 云数据库MySQL 监控类
 
         #region 云数据库 TDSQL(MariaDB) 监控类
+
         /// <summary>
         /// 数据磁盘可用大小
         /// </summary>
@@ -570,9 +573,11 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             return SimpleBaseMonitor(q, "qce/tdsql", "cpu_usage_rate", "uuid", unInstanceId, c, startTime, endTime, p);
         }
-        #endregion
+
+        #endregion 云数据库 TDSQL(MariaDB) 监控类
 
         #region 云存储Redis 监控类
+
         /// <summary>
         /// cache命中率
         /// </summary>
@@ -732,6 +737,7 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             return SimpleBaseMonitor(q, "qce/redis", "connections", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
+
         /// <summary>
         /// 处理请求数
         /// </summary>
@@ -739,6 +745,7 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             return SimpleBaseMonitor(q, "qce/redis", "cpu_us", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
+
         /// <summary>
         /// 外部请求包长度
         /// </summary>
@@ -746,6 +753,7 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             return SimpleBaseMonitor(q, "qce/redis", "in_flow", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
+
         /// <summary>
         /// 主key量
         /// </summary>
@@ -753,6 +761,7 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             return SimpleBaseMonitor(q, "qce/redis", "keys", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
+
         /// <summary>
         /// 外部返回包长度
         /// </summary>
@@ -760,6 +769,7 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             return SimpleBaseMonitor(q, "qce/redis", "out_flow", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
+
         /// <summary>
         /// 所有get命令数
         /// </summary>
@@ -767,6 +777,7 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             return SimpleBaseMonitor(q, "qce/redis", "stat_get", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
+
         /// <summary>
         /// 所有set命令数
         /// </summary>
@@ -774,6 +785,7 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             return SimpleBaseMonitor(q, "qce/redis", "stat_set", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
+
         /// <summary>
         /// 占用空间
         /// </summary>
@@ -781,6 +793,7 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             return SimpleBaseMonitor(q, "qce/redis", "storage", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
+
         /// <summary>
         /// 占用空间占比
         /// </summary>
@@ -788,18 +801,19 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             return SimpleBaseMonitor(q, "qce/redis", "storage_us", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static MonitorType REDIS_(QCloudHelper q, string unInstanceId, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
             return SimpleBaseMonitor(q, "qce/redis", "", "redis_uuid", unInstanceId, c, startTime, endTime, p);
         }
 
-        #endregion
-
+        #endregion 云存储Redis 监控类
 
         #region 监控基础类注释
+
         //GetMonitorData接口使用方法：
 
         //1. 拉取单对象
@@ -837,8 +851,8 @@ namespace QCloudAPIHelper.ModulesHelper
         //&endTime=2016-06-28 14:20:00
 
         //增加batch，将多个dimensions列表包含在里面，限制单次最多可请求50个对象
-        #endregion
 
+        #endregion 监控基础类注释
 
         #region 监控基础类
 
@@ -874,9 +888,8 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <returns></returns>
         public static MultiMonitorType MultiBaseMonitor(QCloudHelper q, string qCloudNamespace, string metricName, List<Dictionary<string, string>> dimensionsMulti, Region c, DateTime startTime, DateTime endTime, Period p = Period.FiveMinute)
         {
-            return BaseMonitor(q, qCloudNamespace, metricName, null, c, startTime, endTime, p, true, dimensionsMulti);
+            return BaseMonitor(q, qCloudNamespace, metricName, null, c, startTime, endTime, p, true, dimensionsMulti) as MultiMonitorType;
         }
-
 
         /// <summary>
         /// 监控请求基础类
@@ -932,16 +945,17 @@ namespace QCloudAPIHelper.ModulesHelper
                     batchCount++;
                 }
             }
-            var returnJson = q.RequestAPi("GetMonitorData", baseParams, APIUrl.Monitor, c);
+            var returnJson = q.RequestAPiAsync("GetMonitorData", baseParams, APIUrl.Monitor, c);
             if (multiObjectPull)
             {
-                return JsonConvert.DeserializeObject<MultiMonitorType>(returnJson);
+                return JsonConvert.DeserializeObject<MultiMonitorType>(returnJson.Result);
             }
             else
             {
-                return JsonConvert.DeserializeObject<MonitorType>(returnJson);
+                return JsonConvert.DeserializeObject<MonitorType>(returnJson.Result);
             }
         }
-        #endregion
+
+        #endregion 监控基础类
     }
 }

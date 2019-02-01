@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using static QCloudAPIHelper.APIEnum;
 
 namespace QCloudAPIHelper.ModulesHelper
 {
     #region 获取高防 IP 列表 返回类型
+
     /// <summary>
     /// 获取高防 IP 列表 返回类型
     /// </summary>
@@ -16,7 +16,6 @@ namespace QCloudAPIHelper.ModulesHelper
         public string message { get; set; }
         public BGPIPDataType data { get; set; }
     }
-
 
     public class BGPIPDataType
     {
@@ -40,9 +39,10 @@ namespace QCloudAPIHelper.ModulesHelper
         public string transRules { get; set; }
     }
 
-    #endregion
+    #endregion 获取高防 IP 列表 返回类型
 
     #region 获取高防 IP 转发规则 返回类型
+
     /// <summary>
     /// 获取高防 IP 转发规则 返回类型
     /// </summary>
@@ -67,15 +67,14 @@ namespace QCloudAPIHelper.ModulesHelper
         public string virtualPort { get; set; }
         public string sourcePort { get; set; }
         public string ipList { get; set; }
-    } 
-    #endregion
+    }
 
-
+    #endregion 获取高防 IP 转发规则 返回类型
 
     /// <summary>
-    /// 大禹网络安全 API 
+    /// 大禹网络安全 API
     /// </summary>
-    public static class BGPIPHelper
+    public static class BGPIP
     {
         /// <summary>
         /// 获取高防 IP 列表
@@ -96,7 +95,7 @@ namespace QCloudAPIHelper.ModulesHelper
             int paging_index,
             int paging_count,
             string region,
-            string filtering_name=null,
+            string filtering_name = null,
             string filtering_ip = null,
             string sorting_field = null,
             string sorting_order = null)
@@ -128,10 +127,9 @@ namespace QCloudAPIHelper.ModulesHelper
                 baseParams.Add("sorting.order", sorting_order);
             }
 
-            var returnJson = q.RequestAPi("NS.BGPIP.GetServicePacks", baseParams, APIUrl.Sec, r);
-            return JsonConvert.DeserializeObject<BGPIPGetListReturnType>(returnJson);
+            var returnJson = q.RequestAPiAsync("NS.BGPIP.GetServicePacks", baseParams, APIUrl.Sec, r);
+            return JsonConvert.DeserializeObject<BGPIPGetListReturnType>(returnJson.Result);
         }
-
 
         /// <summary>
         /// 获取高防 IP 转发规则
@@ -156,8 +154,8 @@ namespace QCloudAPIHelper.ModulesHelper
                 { "bgpId", bgpId }
             };
 
-            var returnJson = q.RequestAPi("NS.BGPIP.ServicePack.GetTransRules", baseParams, APIUrl.Sec, r);
-            return JsonConvert.DeserializeObject<BGPIPGetTransRulesReturnType>(returnJson);
+            var returnJson = q.RequestAPiAsync("NS.BGPIP.ServicePack.GetTransRules", baseParams, APIUrl.Sec, r);
+            return JsonConvert.DeserializeObject<BGPIPGetTransRulesReturnType>(returnJson.Result);
         }
     }
 }

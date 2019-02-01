@@ -2,11 +2,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using static QCloudAPIHelper.APIEnum;
 
 namespace QCloudAPIHelper.ModulesHelper
 {
     #region 调用参数
+
     /// <summary>
     /// 查询实例列表输出参数
     /// </summary>
@@ -16,18 +16,22 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 公共错误码, 0表示成功，其他值表示失败。
         /// </summary>
         public int code { get; set; }
+
         /// <summary>
         /// 模块错误信息描述，与接口相关。
         /// </summary>
         public string message { get; set; }
+
         /// <summary>
         /// 英文错误描述
         /// </summary>
         public string codeDesc { get; set; }
+
         /// <summary>
         /// 符合查询条件的实例总数
         /// </summary>
         public int totalCount { get; set; }
+
         /// <summary>
         /// 返回的实例信息
         /// </summary>
@@ -43,10 +47,12 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 公共错误码, 0表示成功，其他值表示失败。
         /// </summary>
         public int code { get; set; }
+
         /// <summary>
         /// 模块错误信息描述，与接口相关。
         /// </summary>
         public string message { get; set; }
+
         /// <summary>
         /// 英文错误描述
         /// </summary>
@@ -60,7 +66,7 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <summary>
         /// 数据
         /// </summary>
-        public Dictionary<string,dynamic> data { get; set; }
+        public Dictionary<string, dynamic> data { get; set; }
     }
 
     /// <summary>
@@ -72,54 +78,67 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 实例ID，格式如：cdb-c1nl9rpv。与云数据库控制台页面显示的实例ID相同，可用于查询或操作实例。推荐使用
         /// </summary>
         public string uInstanceId { get; set; }
+
         /// <summary>
         /// 实例 UUID （已废弃），推荐使用 uInstanceId 替代。实例创建成功后才生成实例 UUID ，创建中的实例只包含 uInstanceId。
         /// </summary>
         public string cdbInstanceId { get; set; }
+
         /// <summary>
         /// 实例初始化标记，可能返回值：0-未初始化；1-已初始化
         /// </summary>
         public int initFlag { get; set; }
+
         /// <summary>
         /// 实例类型，可能返回值：1-主实例；2-灾备实例
         /// </summary>
         public int cdbInstanceType { get; set; }
+
         /// <summary>
         /// 实例存储容量，同 volume 字段值相同，推荐使用 volume 字段，单位：G
         /// </summary>
         public int storageSize { get; set; }
+
         /// <summary>
         /// 实例最大查询次数，单位：次/秒
         /// </summary>
         public int maxQueryCount { get; set; }
+
         /// <summary>
         /// 实例名称
         /// </summary>
         public string cdbInstanceName { get; set; }
+
         /// <summary>
         /// 实例访问IP
         /// </summary>
         public string cdbInstanceVip { get; set; }
+
         /// <summary>
         /// 实例访问端口
         /// </summary>
         public int cdbInstanceVport { get; set; }
+
         /// <summary>
         /// 外网访问状态，可能返回值：0-未开通 1-已开通 2-已关闭 3-处理中
         /// </summary>
         public int cdbWanStatus { get; set; }
+
         /// <summary>
         /// 外网访问域名
         /// </summary>
         public string cdbWanDomain { get; set; }
+
         /// <summary>
         /// 外网访问端口
         /// </summary>
         public int cdbWanPort { get; set; }
+
         /// <summary>
         /// 实例状态，可能返回值： 0-创建中 1-运行中 4-删除中 5-隔离中 101-锁定中
         /// </summary>
         public int status { get; set; }
+
         /// <summary>
         /// 实例任务状态，可能返回值：
         ///0-没有任务
@@ -138,94 +157,117 @@ namespace QCloudAPIHelper.ModulesHelper
         ///14-灾备实例创建同步中
         /// </summary>
         public int taskStatus { get; set; }
+
         /// <summary>
         /// 实例数据库引擎版本，可能返回值：5.1、5.5和5.6
         /// </summary>
         public string engineVersion { get; set; }
+
         /// <summary>
         /// 实例创建时间，时间格式：yyyy-mm-dd hh:mm:ss
         /// </summary>
         public string cdbInstanceCreateTime { get; set; }
+
         /// <summary>
         /// 实例到期时间，如实例为按量计费模式，则此字段值为0000-00-00 00:00:00。时间格式：yyyy-mm-dd hh:mm:ss
         /// </summary>
         public string cdbInstanceDeadlineTime { get; set; }
+
         /// <summary>
         /// 实例类型的序号，可用此参数购买同类型实例或者查询同类型实例的续费价格
         /// </summary>
         public string cdbTypeSet { get; set; }
+
         /// <summary>
         /// 实例规格描述，如：CUSTOM ，请使用查询可创建规格接口查询cdbType详情
         /// </summary>
         public string cdbType { get; set; }
+
         /// <summary>
         /// 实例内存大小，单位：MB
         /// </summary>
         public int memory { get; set; }
+
         /// <summary>
         /// 实例硬盘大小，单位：GB
         /// </summary>
         public int volume { get; set; }
+
         /// <summary>
         /// 自动续费标记，可能返回值：0-不自动续费；1-自动续费
         /// </summary>
         public int autoRenew { get; set; }
+
         /// <summary>
         /// 实例所在可用区ID
         /// </summary>
         public int zoneId { get; set; }
+
         /// <summary>
         /// 实例所在私有网络ID，请使用查询私有网络列表
         /// </summary>
         public int vpcId { get; set; }
+
         /// <summary>
         /// 实例所在私有网络子网ID，请使用查询私有网络列表
         /// </summary>
         public int subnetId { get; set; }
+
         /// <summary>
         /// 实例所在项目ID，请使用查询项目列表接口获取项目ID
         /// </summary>
         public int projectId { get; set; }
+
         /// <summary>
         /// 实例计费类型，可能返回值：0-包年包月；1-按量计费；2-后付费月结
         /// </summary>
         public int payType { get; set; }
+
         /// <summary>
         /// 主实例信息，如实例是灾备实例或只读实例，则该字段返回其主实例信息，否则返回null
         /// </summary>
         public List<MasterInfoType> masterInfo { get; set; }
+
         /// <summary>
         /// 只读实例信息
         /// </summary>
         public List<RoInfoType> roInfo { get; set; }
+
         /// <summary>
         /// 灾备实例信息
         /// </summary>
         public List<DrInfoType> drInfo { get; set; }
+
         /// <summary>
         /// 数据保护方式
         /// </summary>
         public int protectMode { get; set; }
+
         /// <summary>
         /// 备库1可用区Id
         /// </summary>
         public int slaveZoneFirst { get; set; }
+
         /// <summary>
         /// 备库2可用区Id,若无则为0
         /// </summary>
         public int slaveZoneSecond { get; set; }
+
         /// <summary>
         /// 备库2的IP，若无则为空
         /// </summary>
         public string slaveSecondVip { get; set; }
+
         /// <summary>
         /// 备库2的端口，若无则为0
         /// </summary>
         public int slaveSecondVport { get; set; }
+
         /// <summary>
         /// 部署方式，0为单可用部署，1为多可用区部署
         /// </summary>
         public int deployMode { get; set; }
+
         /// <summary>
         /// binglog大小，单位：GB
         /// </summary>
@@ -241,14 +283,17 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 区域ID，详见公共请求参数
         /// </summary>
         public string region { get; set; }
+
         /// <summary>
         /// 实例所在可用区ID
         /// </summary>
         public int zoneId { get; set; }
+
         /// <summary>
         /// 实例ID，实例唯一标识。功能同cdbInstanceId字段。推荐使用
         /// </summary>
         public string uInstanceId { get; set; }
+
         /// <summary>
         /// 实例状态，可能返回值：
         ///0-创建中
@@ -268,14 +313,17 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 区域ID，详见公共请求参数
         /// </summary>
         public string region { get; set; }
+
         /// <summary>
         /// 实例所在可用区ID
         /// </summary>
         public int zoneId { get; set; }
+
         /// <summary>
         /// 实例ID，实例唯一标识。功能同cdbInstanceId字段。推荐使用
         /// </summary>
         public string uInstanceId { get; set; }
+
         /// <summary>
         /// 只读实例状态，可能返回值：
         ///0-创建中
@@ -295,14 +343,17 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 区域ID，详见公共请求参数
         /// </summary>
         public string region { get; set; }
+
         /// <summary>
         /// 实例所在可用区ID
         /// </summary>
         public int zoneId { get; set; }
+
         /// <summary>
         /// 实例ID，实例唯一标识。功能同cdbInstanceId字段。推荐使用
         /// </summary>
         public string uInstanceId { get; set; }
+
         /// <summary>
         ///实例状态，可能返回值：
         ///0-创建中
@@ -311,6 +362,7 @@ namespace QCloudAPIHelper.ModulesHelper
         ///5-隔离中
         /// </summary>
         public int status { get; set; }
+
         /// <summary>
         ///同步状态，可能返回值：
         ///0-未同步
@@ -331,14 +383,17 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 公共错误码, 0表示成功，其他值表示失败。
         /// </summary>
         public int code { get; set; }
+
         /// <summary>
         /// 模块错误信息描述，与接口相关。
         /// </summary>
         public string message { get; set; }
+
         /// <summary>
         /// 英文错误描述
         /// </summary>
         public string codeDesc { get; set; }
+
         /// <summary>
         /// 任务ID，请使用查询初始化异步任务详情接口查询任务详情。
         /// </summary>
@@ -354,14 +409,17 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 公共错误码, 0表示成功，其他值表示失败。
         /// </summary>
         public int code { get; set; }
+
         /// <summary>
         /// 模块错误信息描述，与接口相关。
         /// </summary>
         public string message { get; set; }
+
         /// <summary>
         /// 英文错误描述
         /// </summary>
         public string codeDesc { get; set; }
+
         /// <summary>
         /// 任务详情
         /// </summary>
@@ -377,39 +435,46 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 任务错误码, 0表示成功，其他值表示失败。
         /// </summary>
         public string code { get; set; }
+
         /// <summary>
         /// 任务信息，如果任务失败，则返回出错信息。
         /// </summary>
         public string message { get; set; }
+
         /// <summary>
         /// 任务ID
         /// </summary>
         public int jobId { get; set; }
+
         /// <summary>
         /// 任务类型，可能返回的值：6-初始化实例
         /// </summary>
         public int type { get; set; }
+
         /// <summary>
         /// 任务状态，可能返回值：0-运行中；2-执行成功；3-执行失败；4-已中止；5-已删除；6-正在中止。
         /// </summary>
         public int status { get; set; }
+
         /// <summary>
         /// 任务进度，取值范围：[0-100]，其中，0表示任务开始，100表示任务完成。
         /// </summary>
         public int progress { get; set; }
+
         /// <summary>
         /// 任务开始时间，时间格式如：2017-02-05 18:19:08
         /// </summary>
         public string startTime { get; set; }
+
         /// <summary>
         /// 任务结束时间，时间格式如：2017-02-05 18:19:08
         /// </summary>
         public string endTime { get; set; }
+
         /// <summary>
         /// 任务信息
         /// </summary>
         public List<CDBInitInfoJobdetailRetrunType> detail { get; set; }
-
     }
 
     /// <summary>
@@ -432,14 +497,17 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 公共错误码, 0表示成功，其他值表示失败。
         /// </summary>
         public int code { get; set; }
+
         /// <summary>
         /// 模块错误信息描述，与接口相关。
         /// </summary>
         public string message { get; set; }
+
         /// <summary>
         /// 英文错误描述
         /// </summary>
         public string codeDesc { get; set; }
+
         /// <summary>
         /// 任务ID，请使用查询初始化异步任务详情接口查询任务详情。
         /// </summary>
@@ -456,15 +524,15 @@ namespace QCloudAPIHelper.ModulesHelper
         public int jobId { get; set; }
     }
 
-    #endregion
-
+    #endregion 调用参数
 
     /// <summary>
     /// CDB 主类
     /// </summary>
-    public static class CDBHelper
+    public static class CDB
     {
         #region 实例操作
+
         /// <summary>
         /// 查询实例列表 输入参数
         /// </summary>
@@ -522,8 +590,8 @@ namespace QCloudAPIHelper.ModulesHelper
                 }
             }
 
-            var returnJson = q.RequestAPi("DescribeCdbInstances", baseParams, APIUrl.Cdb, r);
-            return JsonConvert.DeserializeObject<CDBListRetrunType>(returnJson);
+            var returnJson = q.RequestAPiAsync("DescribeCdbInstances", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBListRetrunType>(returnJson.Result);
         }
 
         /// <summary>
@@ -545,7 +613,6 @@ namespace QCloudAPIHelper.ModulesHelper
             List<string> cdbInstanceVips = null
             )
         {
-
             var temp = CDBInstanceList(q, r, projectId, status, cdbInstanceIds, cdbInstanceVips, limit: 20);
             int count = temp.totalCount;
             CDBListRetrunType c = new CDBListRetrunType()
@@ -555,7 +622,6 @@ namespace QCloudAPIHelper.ModulesHelper
                 codeDesc = temp.codeDesc,
                 code = temp.code,
                 cdbInstanceSet = new List<CDBInstanceSetType>()
-
             };
             if (count > 0)
             {
@@ -567,13 +633,11 @@ namespace QCloudAPIHelper.ModulesHelper
                     {
                         c.cdbInstanceSet.AddRange(t.cdbInstanceSet);
                     }
-
                 }
             }
 
             return c;
         }
-
 
         /// <summary>
         /// CDB 实例初始化
@@ -605,11 +669,9 @@ namespace QCloudAPIHelper.ModulesHelper
                 { "password", password }
             };
 
-            var returnJson = q.RequestAPi("CdbMysqlInit", baseParams, APIUrl.Cdb, r);
-            return JsonConvert.DeserializeObject<CDBInitializationReturnType>(returnJson);
-
+            var returnJson = q.RequestAPiAsync("CdbMysqlInit", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBInitializationReturnType>(returnJson.Result);
         }
-
 
         /// <summary>
         /// 查询CDB实例初始化状态
@@ -622,12 +684,9 @@ namespace QCloudAPIHelper.ModulesHelper
         {
             var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) { { "jobId", jobId } };
 
-            var returnJson = q.RequestAPi("GetCdbInitInfo", baseParams, APIUrl.Cdb, r);
-            return JsonConvert.DeserializeObject<CDBInitInfoRetrunType>(returnJson);
-
+            var returnJson = q.RequestAPiAsync("GetCdbInitInfo", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBInitInfoRetrunType>(returnJson.Result);
         }
-
-
 
         /// <summary>
         /// 升级数据库引擎版本
@@ -644,12 +703,14 @@ namespace QCloudAPIHelper.ModulesHelper
                 { "engineVersion", engineVersion }
             };
 
-            var returnJson = q.RequestAPi("UpgradeCdbEngineVersion", baseParams, APIUrl.Cdb, r);
-            return JsonConvert.DeserializeObject<CDBUpgradeReturnType>(returnJson);
+            var returnJson = q.RequestAPiAsync("UpgradeCdbEngineVersion", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBUpgradeReturnType>(returnJson.Result);
         }
-        #endregion
+
+        #endregion 实例操作
 
         #region 实例费用等相关业务
+
         /// <summary>
         /// CDB续费
         /// </summary>
@@ -665,8 +726,8 @@ namespace QCloudAPIHelper.ModulesHelper
                 { "period", period }
             };
 
-            var returnJson = q.RequestAPi("RenewCdb", baseParams, APIUrl.Cdb, r);
-            return JsonConvert.DeserializeObject<CDBDealReturnType>(returnJson);
+            var returnJson = q.RequestAPiAsync("RenewCdb", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBDealReturnType>(returnJson.Result);
         }
 
         /// <summary>
@@ -727,8 +788,8 @@ namespace QCloudAPIHelper.ModulesHelper
                 baseParams.Add("slaveZoneSecond", slaveZoneSecond);
             }
 
-            var returnJson = q.RequestAPi("UpgradeCdb", baseParams, APIUrl.Cdb, r);
-            return JsonConvert.DeserializeObject<CDBUpgradeReturnType>(returnJson);
+            var returnJson = q.RequestAPiAsync("UpgradeCdb", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBUpgradeReturnType>(returnJson.Result);
         }
 
         /// <summary>
@@ -757,11 +818,11 @@ namespace QCloudAPIHelper.ModulesHelper
         /// <param name="paramList">其中paramList为修改实例的参数列表.其中 Key 为待修改参数的名，value 为待修改参数的值</param>
         /// <returns></returns>
         public static CDBDealReturnType CDBCreate(
-            QCloudHelper q, 
-            Region r, 
-            string cdbType="CUSTOM",
-            string engineVersion="5.5",
-            int? period=null,
+            QCloudHelper q,
+            Region r,
+            string cdbType = "CUSTOM",
+            string engineVersion = "5.5",
+            int? period = null,
             int? goodsNum = null,
             string vpcId = null,
             string subnetId = null,
@@ -777,7 +838,7 @@ namespace QCloudAPIHelper.ModulesHelper
             int deployMode = 0,
             int? slaveZoneFirst = null,
             int slaveZoneSecond = 0,
-            Dictionary<string,string> paramList=null
+            Dictionary<string, string> paramList = null
             )
         {
             var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) {
@@ -860,7 +921,7 @@ namespace QCloudAPIHelper.ModulesHelper
                 baseParams.Add("slaveZoneFirst", slaveZoneFirst);
             }
 
-            if (slaveZoneSecond!=0)
+            if (slaveZoneSecond != 0)
             {
                 baseParams.Add("slaveZoneSecond", slaveZoneSecond);
             }
@@ -874,11 +935,11 @@ namespace QCloudAPIHelper.ModulesHelper
                     baseParams.Add($"paramList.{count}.value", paramList[paramListKey]);
                 }
             }
-            
-            var returnJson = q.RequestAPi("RenewCdb", baseParams, APIUrl.Cdb, r);
-            return JsonConvert.DeserializeObject<CDBDealReturnType>(returnJson);
+
+            var returnJson = q.RequestAPiAsync("RenewCdb", baseParams, APIUrl.Cdb, r);
+            return JsonConvert.DeserializeObject<CDBDealReturnType>(returnJson.Result);
         }
 
-        #endregion
+        #endregion 实例费用等相关业务
     }
 }

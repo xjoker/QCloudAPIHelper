@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static QCloudAPIHelper.APIEnum;
 
 namespace QCloudAPIHelper.ModulesHelper
 {
@@ -17,14 +13,17 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 公共错误码, 0表示成功，其他值表示失败。
         /// </summary>
         public int code { get; set; }
+
         /// <summary>
         /// 模块错误信息描述，与接口相关。
         /// </summary>
         public string message { get; set; }
+
         /// <summary>
         /// 业务侧错误码英文描述。成功时返回Success，错误时返回具体业务错误原因
         /// </summary>
         public string codeDesc { get; set; }
+
         /// <summary>
         /// 实例数
         /// </summary>
@@ -32,100 +31,122 @@ namespace QCloudAPIHelper.ModulesHelper
 
         public RedisDataType data { get; set; }
     }
+
     public class RedisDataType
     {
         public List<RedisDataRedisSetType> redisSet { get; set; }
     }
+
     public class RedisDataRedisSetType
     {
         /// <summary>
         /// 实例名称
         /// </summary>
         public string redisName { get; set; }
+
         /// <summary>
         /// 实例唯一串号
         /// </summary>
         public string redisId { get; set; }
+
         /// <summary>
         /// appid
         /// </summary>
         public int appid { get; set; }
+
         /// <summary>
         /// 项目id
         /// </summary>
         public int projectId { get; set; }
+
         /// <summary>
         /// 地域id 1--广州 4--上海 5-- 香港 6--多伦多 7--上海金融 8--北京 9-- 新加坡 11--深圳金融 15--美西（硅谷）
         /// </summary>
         public int regionId { get; set; }
+
         /// <summary>
         /// 区域id
         /// </summary>
         public int zoneId { get; set; }
+
         /// <summary>
         /// vpc网络id，不推荐使用
         /// </summary>
         public int vpcId { get; set; }
+
         /// <summary>
         /// vpc网络id，推荐使用
         /// </summary>
         public string unVpcId { get; set; }
+
         /// <summary>
         /// vpc网络下子网id，不推荐使用
         /// </summary>
         public int subnetId { get; set; }
+
         /// <summary>
         /// vpc网络下子网id，推荐使用
         /// </summary>
         public string unSubnetId { get; set; }
+
         /// <summary>
         /// 实例当前状态，0：待初始化；1：实例在流程中；2：实例运行中；-2：实例已隔离
         /// </summary>
         public int status { get; set; }
+
         /// <summary>
         /// 实例状态描述
         /// </summary>
         public string statusDesc { get; set; }
+
         /// <summary>
         /// 实例vip
         /// </summary>
         public string wanIp { get; set; }
+
         /// <summary>
         /// 实例端口号
         /// </summary>
         public int port { get; set; }
+
         /// <summary>
         /// 实例创建时间
         /// </summary>
         public string createtime { get; set; }
+
         /// <summary>
         /// 实例容量大小，单位：MB
         /// </summary>
         public int size { get; set; }
+
         /// <summary>
         /// 实例当前已使用容量，单位：MB
         /// 腾讯云API中定义为int 实际返回为String类型
         /// </summary>
         public string sizeUsed { get; set; }
+
         /// <summary>
         /// 实例类型，1：集群版；2：单机版
         /// </summary>
         public int typeId { get; set; }
+
         /// <summary>
         /// 实例类型描述
         /// </summary>
         public String typeIddesc { get; set; }
+
         /// <summary>
         /// 实例是否设置自动续费标识，1：设置自动续费；0：未设置自动续费
         /// </summary>
         public int autoRenewFlag { get; set; }
+
         /// <summary>
         /// 实例到期时间
         /// </summary>
         public string deadlineTime { get; set; }
     }
 
-    public static class RedisHelper
+    public static class Redis
     {
         /// <summary>
         /// Redis 实例获取
@@ -223,8 +244,8 @@ namespace QCloudAPIHelper.ModulesHelper
                 }
             }
 
-            var returnJson = q.RequestAPi("DescribeRedis", baseParams, APIUrl.Redis);
-            return JsonConvert.DeserializeObject<RedisListRetrunType>(returnJson);
+            var returnJson = q.RequestAPiAsync("DescribeRedis", baseParams, APIUrl.Redis);
+            return JsonConvert.DeserializeObject<RedisListRetrunType>(returnJson.Result);
         }
 
         /// <summary>
@@ -274,11 +295,9 @@ namespace QCloudAPIHelper.ModulesHelper
                     {
                         r.data.redisSet.AddRange(t.data.redisSet);
                     }
-
                 }
             }
             return r;
-
         }
     }
 }

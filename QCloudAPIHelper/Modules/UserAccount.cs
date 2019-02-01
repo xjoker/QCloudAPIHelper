@@ -2,11 +2,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using static QCloudAPIHelper.APIEnum;
 
 namespace QCloudAPIHelper.ModulesHelper
 {
     #region 支付状态等返回类型
+
     /// <summary>
     /// 支付状态枚举
     /// </summary>
@@ -35,14 +35,17 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 公共错误码, 0表示成功，其他值表示失败。
         /// </summary>
         public int code { get; set; }
+
         /// <summary>
         /// 模块错误信息描述，与接口相关。
         /// </summary>
         public string message { get; set; }
+
         /// <summary>
         /// 英文错误描述
         /// </summary>
         public string codeDesc { get; set; }
+
         public List<PayOrderData> data { get; set; }
     }
 
@@ -55,16 +58,17 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 支付成功的订单号数组
         /// </summary>
         public List<string> dealNames { get; set; }
+
         /// <summary>
         /// 支付成功的订单对应的资源ID数组
         /// </summary>
         public List<string> resourceIds { get; set; }
+
         /// <summary>
         /// 支付成功的订单对应的自增ID数组
         /// </summary>
         public List<string> dealIds { get; set; }
     }
-
 
     /// <summary>
     /// 查询订单返回类型
@@ -75,10 +79,12 @@ namespace QCloudAPIHelper.ModulesHelper
         /// 公共错误码, 0表示成功，其他值表示失败。
         /// </summary>
         public int code { get; set; }
+
         /// <summary>
         /// 模块错误信息描述，与接口相关。
         /// </summary>
         public string message { get; set; }
+
         /// <summary>
         /// 英文错误描述
         /// </summary>
@@ -91,10 +97,12 @@ namespace QCloudAPIHelper.ModulesHelper
     {
         public string totalNum { get; set; }
         public dynamic deals { get; set; }
-    } 
-    #endregion
+    }
+
+    #endregion 支付状态等返回类型
 
     #region 查询账单列表返回类型
+
     /// <summary>
     /// 查询账单列表返回类型
     /// </summary>
@@ -104,6 +112,7 @@ namespace QCloudAPIHelper.ModulesHelper
         public string message { get; set; }
         public PayDescribBillsDatalist data { get; set; }
     }
+
     /// <summary>
     /// bill_type 对应关系
     /// </summary>
@@ -167,7 +176,7 @@ namespace QCloudAPIHelper.ModulesHelper
         public double total_pay { get; set; }
     }
 
-    #endregion
+    #endregion 查询账单列表返回类型
 
     #region 获取订单信息 返回值
 
@@ -203,7 +212,7 @@ namespace QCloudAPIHelper.ModulesHelper
     }
 
     /// <summary>
-    /// 产品分类ID 
+    /// 产品分类ID
     /// </summary>
     public enum PayOrderDescribeDealsByCondGoodsCategoryId
     {
@@ -257,7 +266,7 @@ namespace QCloudAPIHelper.ModulesHelper
         TDSQL预付费购买 = 69,
         TDSQL续费 = 70,
         TDSQL升级 = 71,
-        云数据库Mysql新购=100016,
+        云数据库Mysql新购 = 100016,
         云数据库Mysql续费 = 100017
     }
 
@@ -277,9 +286,7 @@ namespace QCloudAPIHelper.ModulesHelper
         支付中
     }
 
-
-    #endregion
-
+    #endregion 获取订单信息 返回值
 
     /// <summary>
     /// 查询账单详情返回类型
@@ -310,7 +317,7 @@ namespace QCloudAPIHelper.ModulesHelper
     /// <summary>
     /// 用户账户接口帮助类
     /// </summary>
-    public static class UserAccountHelper
+    public static class UserAccount
     {
         /// <summary>
         /// 支付订单
@@ -334,7 +341,6 @@ namespace QCloudAPIHelper.ModulesHelper
                 { "agentPay", agentPay }
             };
 
-
             if (dealNames != null)
             {
                 for (int i = 0; i < dealNames.Count; i++)
@@ -343,10 +349,9 @@ namespace QCloudAPIHelper.ModulesHelper
                 }
             }
 
-            var returnJson = q.RequestAPi("PayDealsNew", baseParams, APIUrl.Pay, r);
-            return JsonConvert.DeserializeObject<PayOrderReturn>(returnJson);
+            var returnJson = q.RequestAPiAsync("PayDealsNew", baseParams, APIUrl.Pay, r);
+            return JsonConvert.DeserializeObject<PayOrderReturn>(returnJson.Result);
         }
-
 
         /// <summary>
         /// 查询客户订单
@@ -388,7 +393,6 @@ namespace QCloudAPIHelper.ModulesHelper
                 baseParams.Add("creatTimeRangeEnd", creatTimeRangeEnd);
             }
 
-
             if (page != null)
             {
                 baseParams.Add("page", page);
@@ -414,8 +418,8 @@ namespace QCloudAPIHelper.ModulesHelper
                 baseParams.Add("payerMode", payerMode);
             }
 
-            var returnJson = q.RequestAPi("QueryClientDeals", baseParams, APIUrl.Pay, r);
-            return JsonConvert.DeserializeObject<PayOrderQueryReturnType>(returnJson);
+            var returnJson = q.RequestAPiAsync("QueryClientDeals", baseParams, APIUrl.Pay, r);
+            return JsonConvert.DeserializeObject<PayOrderQueryReturnType>(returnJson.Result);
         }
 
         /// <summary>
@@ -462,8 +466,8 @@ namespace QCloudAPIHelper.ModulesHelper
                 baseParams.Add("orderType", orderType);
             }
 
-            var returnJson = q.RequestAPi("DescribeBills", baseParams, APIUrl.Bill, r);
-            return JsonConvert.DeserializeObject<PayDescribBillsRetrunType>(returnJson);
+            var returnJson = q.RequestAPiAsync("DescribeBills", baseParams, APIUrl.Bill, r);
+            return JsonConvert.DeserializeObject<PayDescribBillsRetrunType>(returnJson.Result);
         }
 
         /// <summary>
@@ -492,10 +496,9 @@ namespace QCloudAPIHelper.ModulesHelper
                 { "billType", billType }
             };
 
-            var returnJson = q.RequestAPi("DescribeBillDetail", baseParams, APIUrl.Bill, r);
-            return JsonConvert.DeserializeObject<PayDescribeBillDetailRetrunType>(returnJson);
+            var returnJson = q.RequestAPiAsync("DescribeBillDetail", baseParams, APIUrl.Bill, r);
+            return JsonConvert.DeserializeObject<PayDescribeBillDetailRetrunType>(returnJson.Result);
         }
-
 
         /// <summary>
         /// 获取订单信息
@@ -533,8 +536,8 @@ namespace QCloudAPIHelper.ModulesHelper
                 baseParams.Add("dealId", dealId);
             }
 
-            var returnJson = q.RequestAPi("DescribeDealsByCond", baseParams, APIUrl.Trade, r);
-            return JsonConvert.DeserializeObject<PayOrderDescribeDealsByCondRetrunType>(returnJson);
+            var returnJson = q.RequestAPiAsync("DescribeDealsByCond", baseParams, APIUrl.Trade, r);
+            return JsonConvert.DeserializeObject<PayOrderDescribeDealsByCondRetrunType>(returnJson.Result);
         }
     }
 }

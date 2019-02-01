@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using static QCloudAPIHelper.APIEnum;
 
 namespace QCloudAPIHelper.ModulesHelper
 {
     #region CVM 数据类型
+
     /// <summary>
     /// CVM 列表返回类型
     /// </summary>
@@ -128,7 +128,7 @@ namespace QCloudAPIHelper.ModulesHelper
     }
 
     /// <summary>
-    /// CVM 返回值 Instance 
+    /// CVM 返回值 Instance
     /// </summary>
     public class CVMInstanceSetInstanceType
     {
@@ -150,7 +150,6 @@ namespace QCloudAPIHelper.ModulesHelper
         public DateTime CreatedTime { get; set; }
         public DateTime ExpiredTime { get; set; }
     }
-
 
     /// <summary>
     /// 用于CVM 启动/关闭/重启 的返回类型
@@ -175,14 +174,15 @@ namespace QCloudAPIHelper.ModulesHelper
         public CVMInstanceStatusType InstanceStatusSet { get; set; }
     }
 
-    #endregion
+    #endregion CVM 数据类型
 
     /// <summary>
     /// CVM 操纵主类
     /// </summary>
-    public static class CvmHelper
+    public static class Cvm
     {
         #region CVM 列表获取
+
         /// <summary>
         /// 获取CVM列表
         /// </summary>
@@ -212,7 +212,6 @@ namespace QCloudAPIHelper.ModulesHelper
             int limit = 20)
         {
             int filterCount = 1;
-
 
             var baseParams = new SortedDictionary<string, object>(StringComparer.Ordinal) { ["Version"] = "2017-03-12" };
 
@@ -301,11 +300,10 @@ namespace QCloudAPIHelper.ModulesHelper
                 filterCount++;
             }
 
-            var returnJson = q.RequestAPi("DescribeInstances", baseParams, APIUrl.Cvm, r);
-            var d = JsonConvert.DeserializeObject<CvmListReturnType>(returnJson);
+            var returnJson = q.RequestAPiAsync("DescribeInstances", baseParams, APIUrl.Cvm, r);
+            var d = JsonConvert.DeserializeObject<CvmListReturnType>(returnJson.Result);
             return d;
         }
-
 
         /// <summary>
         /// 获取所有的CVM
@@ -349,7 +347,6 @@ namespace QCloudAPIHelper.ModulesHelper
                     {
                         c.InstanceSet.AddRange(t.Response.InstanceSet);
                     }
-
                 }
             }
 
@@ -358,9 +355,10 @@ namespace QCloudAPIHelper.ModulesHelper
             return resp;
         }
 
-        #endregion
+        #endregion CVM 列表获取
 
         #region CVM  启动/关闭/重启
+
         /// <summary>
         /// 启动CVM
         /// </summary>
@@ -443,12 +441,14 @@ namespace QCloudAPIHelper.ModulesHelper
                 }
             }
 
-            var returnJson = q.RequestAPi(actionList, baseParams, APIUrl.Cvm, region);
-            return JsonConvert.DeserializeObject<BaseCvmOperationReturnType>(returnJson);
+            var returnJson = q.RequestAPiAsync(actionList, baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCvmOperationReturnType>(returnJson.Result);
         }
-        #endregion
+
+        #endregion CVM  启动/关闭/重启
 
         #region CVM 重装
+
         /// <summary>
         /// 重装CVM
         /// </summary>
@@ -506,13 +506,14 @@ namespace QCloudAPIHelper.ModulesHelper
                 baseParams.Add("EnhancedService", EnhancedService);
             }
 
-            var returnJson = q.RequestAPi("ResetInstances", baseParams, APIUrl.Cvm, region);
-            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson);
-
+            var returnJson = q.RequestAPiAsync("ResetInstances", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson.Result);
         }
-        #endregion
+
+        #endregion CVM 重装
 
         #region CVM 实例重命名
+
         /// <summary>
         /// 重命名 CVM 实例
         /// </summary>
@@ -537,14 +538,14 @@ namespace QCloudAPIHelper.ModulesHelper
                 }
             }
 
-            var returnJson = q.RequestAPi("ModifyInstanceAttributes", baseParams, APIUrl.Cvm, region);
-            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson);
-
+            var returnJson = q.RequestAPiAsync("ModifyInstanceAttributes", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson.Result);
         }
-        #endregion
 
+        #endregion CVM 实例重命名
 
         #region CVM 实例密码重置
+
         /// <summary>
         /// 重置 CVM 实例密码
         /// </summary>
@@ -573,13 +574,14 @@ namespace QCloudAPIHelper.ModulesHelper
                     baseParams.Add($"instanceIds.{i}", instanceIds[i]);
                 }
             }
-            var returnJson = q.RequestAPi("ResetInstancePassword", baseParams, APIUrl.Cvm, region);
-            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson);
+            var returnJson = q.RequestAPiAsync("ResetInstancePassword", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson.Result);
         }
-        #endregion
 
+        #endregion CVM 实例密码重置
 
         #region 退还CVM实例
+
         /// <summary>
         /// 退还实例
         /// </summary>
@@ -599,13 +601,14 @@ namespace QCloudAPIHelper.ModulesHelper
                 }
             }
 
-            var returnJson = q.RequestAPi("TerminateInstances", baseParams, APIUrl.Cvm, region);
-            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson);
-
+            var returnJson = q.RequestAPiAsync("TerminateInstances", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson.Result);
         }
-        #endregion
+
+        #endregion 退还CVM实例
 
         #region 续费CVM实例
+
         /// <summary>
         /// 续费CVM实例
         /// </summary>
@@ -628,13 +631,14 @@ namespace QCloudAPIHelper.ModulesHelper
                 }
             }
 
-            var returnJson = q.RequestAPi("RenewInstances", baseParams, APIUrl.Cvm, region);
-            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson);
-
+            var returnJson = q.RequestAPiAsync("RenewInstances", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<BaseCvmOperationResponseType>(returnJson.Result);
         }
-        #endregion
+
+        #endregion 续费CVM实例
 
         #region 查看CVM实例状态列表
+
         /// <summary>
         /// 查看CVM实例状态列表
         /// </summary>
@@ -658,11 +662,10 @@ namespace QCloudAPIHelper.ModulesHelper
                 }
             }
 
-            var returnJson = q.RequestAPi("DescribeInstancesStatus", baseParams, APIUrl.Cvm, region);
-            return JsonConvert.DeserializeObject<CVMStatusReturnType>(returnJson);
-
+            var returnJson = q.RequestAPiAsync("DescribeInstancesStatus", baseParams, APIUrl.Cvm, region);
+            return JsonConvert.DeserializeObject<CVMStatusReturnType>(returnJson.Result);
         }
-        #endregion
 
+        #endregion 查看CVM实例状态列表
     }
 }

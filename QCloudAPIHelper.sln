@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QCloudAPIHelper", "QCloudAPIHelper\QCloudAPIHelper.csproj", "{7D79CEBE-2381-4FEE-8375-A863115624EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QCloudAPIHelper.Tests", "QCloudAPIHelper.Tests\QCloudAPIHelper.Tests.csproj", "{132A3A79-8FB7-458A-9610-C696CB28AF36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +17,15 @@ Global
 		{7D79CEBE-2381-4FEE-8375-A863115624EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D79CEBE-2381-4FEE-8375-A863115624EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D79CEBE-2381-4FEE-8375-A863115624EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{132A3A79-8FB7-458A-9610-C696CB28AF36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{132A3A79-8FB7-458A-9610-C696CB28AF36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{132A3A79-8FB7-458A-9610-C696CB28AF36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{132A3A79-8FB7-458A-9610-C696CB28AF36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55FDF4EB-DB45-45C1-8DFD-23657E280846}
 	EndGlobalSection
 EndGlobal
